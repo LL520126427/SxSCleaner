@@ -118,10 +118,11 @@ if exist "%~1" (
 goto :EOF
 
 :PackageAutoSearch
-for /f "tokens=*" %%l in ('dir /b /o-d "%Path_Image%\%PathRel_Packages%\%~1~*%~2*.mum" 2^>nul ^|findstr /v "16385"') do (
+for /f "tokens=*" %%l in ('dir /b /o-d "%Path_Image%\%PathRel_Packages%\%~1~*%~2*.mum" 2^>nul') do (
 	REM 没有“for”项目会立即停止。
 	if ErrorLevel 1 (goto :EOF)
 	call :PackageExport "%%~nl" "%~3" "%~4"
+	goto :EOF
 )
 goto :EOF
 

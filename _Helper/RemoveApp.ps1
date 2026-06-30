@@ -1,5 +1,10 @@
 # 定义要卸载的AppX应用列表
-$remove_appx = @("SecHealthUI")
+# $remove_appx = @("SecHealthUI")
+# 接收参数：传入要卸载的AppX列表
+param(
+    [Parameter(Mandatory=$true)]
+    [string[]]$remove_appx
+)
 
 # 获取系统预配的AppX包和所有用户已安装的AppX包
 $provisioned = get-appxprovisionedpackage -online
