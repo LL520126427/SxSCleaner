@@ -1,0 +1,39 @@
+;指定访问锁定应用
+Microsoft.Windows.AssignedAccessLockApp_
+;内容传递管理器
+Microsoft.Windows.ContentDeliveryManager_
+;Xbox Game UI
+Microsoft.XboxGameCallableUI_
+;家庭功能
+ParentalControls_
+;SmartScreen 筛选器
+Microsoft.Windows.AppRep.ChxApp_
+;Edge 浏览器
+Microsoft.MicrosoftEdge_
+Microsoft.MicrosoftEdgeDevToolsClient_
+;虚拟混合现实
+Microsoft.ECApp_
+;凭据对话框
+microsoft.creddialoghost_
+;管理库文件夹建议
+Microsoft.Windows.AddSuggestedFoldersToLibraryDialog_
+;Windows应用解析
+Microsoft.Windows.AppResolverUX_
+;通话
+Microsoft.Windows.CallingShellApp_
+;截图选择器
+Microsoft.Windows.CapturePicker_
+;文件选择器
+Microsoft.Windows.FilePicker_
+;讲诉人
+microsoft.windows.narratorquickstart_
+;强制网络门户流
+Microsoft.Windows.OOBENetworkCaptivePortal_
+;网络连接流
+Microsoft.Windows.OOBENetworkConnectionFlow_
+;用户体验
+Microsoft.Windows.PeopleExperienceHost_
+;网络连接状态指示器
+NcsiUwpApp_
+;条形码预览
+Windows.CBSPreview_

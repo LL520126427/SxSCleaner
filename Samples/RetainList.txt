@@ -1,0 +1,5 @@
+Microsoft-Windows-InternetExplorer-Optional-Package
+Microsoft-Windows-NetFx3-OC-Package
+Microsoft-Windows-Printing-Foundation-Package
+Microsoft-Windows-SearchEngine-Client-Package
+Microsoft-Windows-BusinessScanning-Feature-Package

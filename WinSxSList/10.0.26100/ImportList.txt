@@ -1,0 +1,85 @@
+;Windows Hypervisor Platform
+Microsoft-Windows-HyperV-OptionalFeature-HypervisorPlatform-Disabled-Package
+;Virtual Machine Platform
+Microsoft-Windows-HyperV-OptionalFeature-VirtualMachinePlatform-Disabled-Package
+Microsoft-Windows-HyperV-OptionalFeature-VirtualMachinePlatform-Client-Disabled-Package
+;Windows Projected 文件系统
+Microsoft-Windows-ProjFS-OptionalFeature-Package
+;设备锁定
+Microsoft-Windows-Client-EmbeddedExp-Package
+Microsoft-Windows-Client-ShellLauncher-Package
+;NFS服务
+Microsoft-Windows-NFS-ClientSKU-Package
+;旧版组件
+Microsoft-Windows-Legacy-Components-OC-Package
+;轻型目录服务
+Microsoft-Windows-DirectoryServices-ADAM-Client-Package
+;远程差分压缩 (RDC)
+Microsoft-Windows-RDC-Package
+;多点连接
+Microsoft-Windows-MultiPoint-Connector-Package
+;简单 TCP/IP 服务
+Microsoft-Windows-SimpleTCP-Package
+;TFTP 客户端
+Microsoft-Windows-TFTP-Client-Package
+;Windows TIFF IFilter ( 光学字符识别 OCR )
+Microsoft-Windows-WinOcr-Package
+;Telnet 客户端
+Microsoft-Windows-Telnet-Client-Package
+;工作文件夹客户端
+Microsoft-Windows-EnterpriseClientSync-Host-Package
+;Windows Media Player
+Microsoft-Windows-MediaPlayer-Package
+;容器
+Microsoft-Windows-OneCore-Containers-Opt-Package
+;Hyper-V
+Microsoft-Hyper-V-ClientEdition-Package
+;适用于Linux 的Windows子系统
+Microsoft-Windows-Lxss-Optional-Package
+Microsoft-Windows-Lxss-Optional-WOW64-Package
+;Windows Communication Foundation HTTP/非HTTP 激活
+Microsoft-Windows-NetFx3-WCF-OC-Package
+;Windows Identity Foundation 3.5
+Microsoft-Windows-Identity-Foundation-Package
+;WCF 服务（包括 HTTP 激活、消息队列(MSMQ)激活、命名管道激活、TCP 激活）
+Microsoft-Windows-NetFx4-WCF-US-OC-Package
+;Internet Information Services 可承载的Web核心、Windows Process Activation Services
+Microsoft-Windows-IIS-WebServer-Package
+;Internet 信息服务
+Microsoft-Windows-IIS-WebServer-AddOn-Package
+Microsoft-Windows-IIS-WebServer-AddOn-2-Package
+;MSMQ 服务器
+Microsoft-Windows-MSMQ-Client-Package
+Microsoft-Windows-MSMQ-Client-Home-Premium-Package
+;WD-Default-Definitions
+Windows-Defender-AM-Default-Definitions-OptionalWrapper-Package
+;--------------------------------------------------------------------------------
+;分割线以下为移除的组件  以上为Windows 功能的组件
+;杀毒
+Microsoft-Windows-SenseClient-Package
+Windows-Defender-Group-Policy-Package
+Windows-Defender-ApplicationGuard-Inbox-Package
+Windows-Defender-ApplicationGuard-Inbox-WOW64-Package
+;云盘
+Microsoft-Windows-OneDrive-Setup-Package
+Microsoft-Windows-OneDrive-Setup-WOW64-Package
+;旧版 Edge 浏览器
+Microsoft-Windows-Internet-Browser-Package
+Microsoft-Windows-MicrosoftEdgeDevToolsClient-Package
+;Microsoft Edge 运行库
+Microsoft-OneCore-Edge-WebRuntime-Package
+;虚拟混合现实
+Microsoft-Windows-Holographic-Desktop-Merged-Package
+Microsoft-Windows-Holographic-Desktop-Merged-WOW64-Package
+;脱机文件
+Microsoft-Windows-OfflineFiles-Package
+;WinSAT 评估工具
+Microsoft-Windows-WinSATMediaFiles-Package
+;Windows 帮助内容
+Microsoft-Windows-Help-ClientUA-Client-Package
+Microsoft-Windows-Help-ClientUA-CoreCountrySpecific-Package
+Server-Help-Package.ClientEnterprise
+Server-Help-Package.ClientHomePremium
+;打印驱动
+Microsoft-Windows-Printer-Drivers-Package
+
