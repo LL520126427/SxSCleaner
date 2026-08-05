@@ -1,0 +1,123 @@
+;移除组件，并生成组件所在的winsxs目录
+;Indexing-Service
+Microsoft-Windows-Indexing-Service-Package
+;InternetExplorer 浏览器
+;Microsoft-Windows-InternetExplorer-Optional-Package
+;Internet Information Services 可承载的Web核心、Windows Process Activation Services
+Microsoft-Windows-IIS-WebServer-Package
+;Internet 信息服务
+Microsoft-Windows-IIS-WebServer-AddOn-Package
+Microsoft-Windows-IIS-WebServer-AddOn-2-Package
+;NetFx 3.5
+;Microsoft-Windows-NetFx3-OC-Package
+;Microsoft 消息队列 (MSMQ)
+Microsoft-Windows-MSMQ-Client-Package
+;NFS 管理工具
+Microsoft-Windows-NFS-ClientSKU-Package
+;RAS 连接管理器管理工具包
+Microsoft-Windows-RasCMAK-Package
+;RIP 侦听器
+Microsoft-Windows-RasRip-Package
+;Tablet PC 组件 (平板电脑)
+Microsoft-Windows-TabletPC-OC-Package
+;Telnet 服务器
+Microsoft-Windows-Telnet-Server-Package
+;Telnet 客户端
+Microsoft-Windows-Telnet-Client-Package
+;TFTP 客户端
+Microsoft-Windows-TFTP-Client-Package
+;Windows 搜索
+;Microsoft-Windows-SearchEngine-Client-Package
+;Windows TIFF IFilter ( 光学字符识别 OCR )
+Microsoft-Windows-WinOcr-Package
+;Windows 小工具、侧边栏
+Microsoft-Windows-Gadget-Platform-Package
+Microsoft-Windows-Sidebar-Killbits-SDP-Package
+;XPS Viewer
+Microsoft-Windows-Xps-Foundation-Client-Package
+;XPS 服务
+Microsoft-Windows-Printing-XPSServices-Package
+;打印和文件服务
+;Microsoft-Windows-Printing-Foundation-Package
+  ;扫描管理
+Microsoft-Windows-BusinessScanning-Feature-Package
+;基于UNIX的应用程序子系统
+Microsoft-Windows-SUA-Package
+;简单 TCP/IP 服务
+Microsoft-Windows-SimpleTCP-Package
+;简单网络管理协议
+Microsoft-Windows-SNMP-Package
+Microsoft-Windows-WMI-SNMP-Provider-Package
+;媒体功能
+;Microsoft-Windows-MediaPlayback-OC-Package
+  ;DVD Maker、DVD播放
+Microsoft-Windows-OpticalMediaDisc-Package
+Microsoft-Windows-ClipsInTheLibrary-Package
+  ;Media Center(媒体中心)
+Microsoft-Windows-MediaCenter-Package
+  ;WindowsMediaPlayer
+;Microsoft-Windows-MediaPlayer-Package
+;Microsoft-Windows-MediaPlayer-DVDRegistration-Package
+;Microsoft-Windows-WindowsMediaPlayer-Troubleshooters-Package
+Microsoft-Windows-WMPNetworkSharingService-Package
+;游戏
+Microsoft-Windows-Shell-InboxGames-Package
+  ;多人游戏
+Microsoft-Windows-Shell-MultiplayerInboxGames-Package
+  ;高级游戏
+Microsoft-Windows-Shell-PremiumInboxGames-Package
+;远程差分压缩 (RDC)
+Microsoft-Windows-RDC-Package
+;--------------------------------------------------------------------------------
+;分割线以下为移除的组件  以上为Windows 功能的组件
+;Hyper-V 来宾
+Microsoft-Hyper-V-Common-Drivers-Package
+Microsoft-Hyper-V-Guest-Integration-Drivers-Package
+;Windows 低版本升级到高版本
+Microsoft-Windows-Anytime-Upgrade-Package
+Microsoft-Windows-Anytime-Upgrade-Results-Package
+;Windows 备份
+Microsoft-Windows-Backup-Package
+Microsoft-Windows-BLB-Client-Package
+;系统恢复
+Microsoft-Windows-SystemRestore-Package
+Microsoft-Windows-RecDisc-SDP-Package
+;Windows 帮助内容
+Microsoft-Windows-Help-CoreClientUAHB-Package
+Microsoft-Windows-Help-CoreClientUAHP-Package
+Microsoft-Windows-Help-CoreClientUAPE-Package
+Microsoft-Windows-Help-CoreClientUAPS-Package
+Microsoft-Windows-Help-CoreClientUASE-Package
+Microsoft-Windows-Help-CoreClientUAUE-Package
+Microsoft-Windows-Help-Customization-Package
+Server-Help-Package.ClientEnterprise
+Server-Help-Package.ClientHomeBasic
+Server-Help-Package.ClientHomePremium
+Server-Help-Package.ClientProfessional
+Server-Help-Package.ClientStarter
+Server-Help-Package.ClientUltimate
+;移动 PC(位置通知、网络投影仪、传感器、SideShow(边栏))
+Microsoft-Windows-MobilePC-Client-Basic-Package
+Microsoft-Windows-MobilePC-Client-LocationBasic-Package
+Microsoft-Windows-MobilePC-Client-Premium-Package
+Microsoft-Windows-MobilePC-Client-Sensors-Package
+Microsoft-Windows-MobilePC-Client-SideShow-Package
+;家长控制
+Microsoft-Windows-ParentalControls-Package
+;媒体示例
+Microsoft-Windows-SampleContent-Music-Package
+Microsoft-Windows-SampleContent-Ringtones-Package
+;声音（默认）
+Microsoft-Windows-Shell-SoundThemes-Package
+;Market Themes(商业主题)
+Microsoft-Windows-LocalPack-CN-Package
+;家长控制
+Microsoft-Windows-ParentalControls-Package
+;打印驱动
+Microsoft-Windows-Printer-Drivers-Package
+;TV Tuner 编码驱动
+Microsoft-Windows-Tuner-Drivers-Package
+;调制解调器
+Microsoft-Windows-Common-Modem-Drivers-Package
+;脱机文件
+Microsoft-Windows-OfflineFiles-Package

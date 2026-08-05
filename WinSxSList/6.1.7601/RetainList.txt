@@ -1,0 +1,14 @@
+;±£Áô×é¼þ
+Microsoft-Windows-Foundation-Package
+Microsoft-Windows-InternetExplorer-Optional-Package
+Microsoft-Windows-IE-Troubleshooters-Package
+Microsoft-Windows-InternetExplorer-Package
+Microsoft-Windows-NetFx3-OC-Package
+Microsoft-Windows-SearchEngine-Client-Package
+Microsoft-Windows-Printing-Foundation-Package
+;Microsoft-Windows-BusinessScanning-Feature-Package
+Microsoft-Windows-MediaPlayback-OC-Package
+Microsoft-Windows-MediaPlayer-Package
+Microsoft-Windows-MediaPlayer-DVDRegistration-Package
+Microsoft-Windows-WindowsMediaPlayer-Troubleshooters-Package
+;Microsoft-Windows-WMPNetworkSharingService-Package
