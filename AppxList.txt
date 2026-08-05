@@ -1,141 +1,167 @@
 要使对此文件的修改生效，需要将 SxSExportConfig.ini 文件中的 Flag_RemoveA 选项设置为 1。
 通过移除下方应用项前的 ; 前缀来删除所需应用
 
-;应用商店
-;Microsoft.WindowsStore
-;Microsoft.StorePurchaseApp
-;相机
-;Microsoft.WindowsCamera
-;记事本
-;Microsoft.WindowsNotepad
-;画图
-;Microsoft.Paint
-;计算器
-;Microsoft.WindowsCalculator
-;截图和草图
-;Microsoft.ScreenSketch
+; 应用商店
+Microsoft.WindowsStore
+Microsoft.StorePurchaseApp
+Microsoft.StartExperiencesApp
+; 相机
+Microsoft.WindowsCamera
+; 记事本
+Microsoft.WindowsNotepad
+; 画图
+Microsoft.Paint
+; 计算器
+Microsoft.WindowsCalculator
+; 截图和草图
+Microsoft.ScreenSketch
 
 ; 移除的应用
-;钱包
+  ; 微软 AI 助手
+Microsoft.Copilot
+  ; Edge浏览器（旧版）
+Microsoft.MicrosoftEdge.Stable
+Microsoft.MicrosoftEdgeDevToolsClient
+  ; 云盘
+Microsoft.OneDriveSync
+  ; 小组件
+Microsoft.WidgetsPlatformRuntime
+  ; 云盘
+Microsoft.OneDriveSync
+  ; 钱包
 Microsoft.Wallet
-;Skype
+  ; Skype
 Microsoft.SkypeApp
-;3D打印
+  ; 3D打印
 Microsoft.Print3D
-;人脉
+  ; 人脉
 Microsoft.People
-;一键连接
+  ; 一键连接
 Microsoft.OneConnect
-;OneNote
+  ; OneNote
 Microsoft.Office.OneNote
-;画图3D
+  ; 画图3D
 Microsoft.MSPaint
-;便笺
+  ; 便笺
 Microsoft.MicrosoftStickyNotes
-;照片
+  ; 照片
 Microsoft.Windows.Photos
-;终端
+  ; 终端
 Microsoft.WindowsTerminal
-;闹钟和时钟
+  ; 闹钟和时钟
 Microsoft.WindowsAlarms
-;地图
+  ; 地图
 Microsoft.WindowsMaps
-;邮件和日历
+  ; 邮件和日历
 microsoft.windowscommunicationsapps
-;人脉
+  ; 人脉
 Microsoft.People
-;必应新闻
+  ; 必应新闻
 Microsoft.BingNews
-;必应天气
+  ; 必应天气
 Microsoft.BingWeather
-;必应搜索
+  ; 必应搜索
 Microsoft.BingSearch
-;纸牌
+  ; 纸牌
 Microsoft.MicrosoftSolitaireCollection
-;Office中心
+  ; Office中心
 Microsoft.MicrosoftOfficeHub
-;反馈中心
+  ; 反馈中心
 Microsoft.WindowsFeedbackHub
-;获取帮助
+  ; 获取帮助
 Microsoft.GetHelp
-;入门指南
+  ; 入门指南
 Microsoft.Getstarted
-;待办事项
+  ; 待办事项
 Microsoft.Todos
-;Power Automate桌面版
+  ; Power Automate桌面版
 Microsoft.PowerAutomateDesktop
-;小娜
+  ; 小娜
 Microsoft.549981C3F5F10
-;快速助手
+  ; 快速助手
 MicrosoftCorporationII.QuickAssist
-;Family
+  ; Family
 MicrosoftCorporationII.MicrosoftFamily
-;视频编辑器
+  ; 视频编辑器
 Clipchamp.Clipchamp
-;Outlook(new)
+  ; Outlook(new)
 Microsoft.OutlookForWindows
-;Microsoft Teams
+  ; Microsoft Teams
 MSTeams
-;Dev Home（开发者主页）
+  ; Dev Home（开发者主页）
 Microsoft.Windows.DevHome
-;应用兼容性增强组件
+  ; 应用兼容性增强组件
 Microsoft.ApplicationCompatibilityEnhancements
-;跨设备体验组件
+  ; 跨设备体验组件
 MicrosoftWindows.CrossDevice
-;微软电脑管家
+  ; 微软电脑管家
 Microsoft.MicrosoftPCManager
-;Edge 游戏助手
+  ; Edge 游戏助手
 Microsoft.Edge.GameAssist
-;消息
+  ; 消息
 Microsoft.Messaging
-;3D查看器
+  ; 3D查看器
 Microsoft.Microsoft3DViewer
-;资讯和兴趣
+  ; 资讯和兴趣
 MicrosoftWindows.Client.WebExperience
 
 ; 媒体应用
-;音乐
+  ; 音乐
 Microsoft.ZuneMusic
-;视频
+  ; 视频
 Microsoft.ZuneVideo
-;你的手机
+  ; 你的手机
 Microsoft.YourPhone
-;录音机
+  ; 录音机
 Microsoft.WindowsSoundRecorder
-;Xbox 游戏
+  ; Xbox 游戏
 Microsoft.XboxApp
 Microsoft.GamingApp
-;Xbox游戏覆盖
+  ; Xbox游戏覆盖
 Microsoft.XboxGameOverlay
-;Xbox游戏栏
+  ; Xbox游戏栏
 Microsoft.XboxGamingOverlay
-;Xbox语音转文字覆盖层
+  ; Xbox语音转文字覆盖层
 Microsoft.XboxSpeechToTextOverlay
-;Xbox身份验证提供程序
+  ; Xbox身份验证提供程序
 Microsoft.XboxIdentityProvider
-;Xbox Live用户界面
+  ; Xbox Live用户界面
 Microsoft.Xbox.TCUI
-;混合现实门户
+  ; 混合现实门户
 Microsoft.MixedReality.Portal
 
-; 媒体编解码器
-;Web媒体扩展
+;  媒体编解码器
+  ; Web媒体扩展
 Microsoft.WebMediaExtensions
-;原始图像扩展
+  ; 原始图像扩展
 Microsoft.RawImageExtension
-;HEIF图像扩展
+  ; HEIF图像扩展
 Microsoft.HEIFImageExtension
-;HEVC视频扩展
+  ; HEVC视频扩展
 Microsoft.HEVCVideoExtension
-;VP9视频扩展
+  ; VP9视频扩展
 Microsoft.VP9VideoExtensions
-;WebP图像扩展
+  ; WebP图像扩展
 Microsoft.WebpImageExtension
-;杜比音频扩展
+  ; 杜比音频扩展
 Microsoft.DolbyAudioExtensions
-;AVC编码器视频扩展
+  ; AVC编码器视频扩展
 Microsoft.AVCEncoderVideoExtension
-;MPEG-2视频扩展
+  ; MPEG-2视频扩展
 Microsoft.MPEG2VideoExtension
-;AV1视频扩展
+  ; AV1视频扩展
 Microsoft.AV1VideoExtension
+
+; 运行库
+Microsoft.NET.Native.Framework.2.2
+Microsoft.NET.Native.Runtime.2.2
+Microsoft.Services.Store.Engagement
+Microsoft.WindowsAppRuntime.1.3
+Microsoft.WindowsAppRuntime.1.4
+Microsoft.WindowsAppRuntime.1.5
+Microsoft.WindowsAppRuntime.1.6
+Microsoft.WindowsAppRuntime.1.7
+Microsoft.UI.Xaml.2.7
+Microsoft.UI.Xaml.2.8
+Microsoft.VCLibs.140.00.UWPDesktop
+Microsoft.VCLibs.140.00

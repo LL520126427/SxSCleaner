@@ -7,7 +7,9 @@ Printing-XPSServices-Features
 SMB1Protocol
 WorkFolders-Client
 Xps-Foundation-Xps-Viewer
-Windows-Defender-Default-Definitions
+;Windows-Defender-Default-Definitions
 WindowsGadgetPlatform
 InboxGames
 TabletPCOC
+;SMB 直通
+SmbDirect

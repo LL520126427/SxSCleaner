@@ -4,6 +4,13 @@ PerfLogs
 \$Recycle.Bin
 Documents and Settings
 --------------------其他组件移除--------------------
+;入门（Windows 11）
+WebExperienceHost.dll
+WebExperienceHostApp.exe
+;Windows 备份（Windows 11）
+WindowsBackup.dll
+WindowsBackupClient.exe
+WindowsBackup$
 ;云盘
 OneDrive
 ;旧版 Microsoft Edge 浏览器
@@ -49,22 +56,22 @@ SecurityHealthSystray.exe
 WindowsSecurityIcon.png
 *.SecHealthUI_*
 *.AppRep.ChxApp_*
-;虚拟现实
-InputController.dll
-PerceptionDevice.dll
-PerceptionSimulation$
-PerceptionSimulation.ProxyStubs.dll
-PerceptionSimulationExtensions.dll
-PerceptionSimulationManager.dll
-SharedRealitySvc.dll
-SpatialStore.dll
-Spectrum.exe
-SpectrumSyncClient.dll
-vac.dll
-Windows.Devices.Perception.dll
-Windows.Mirage.dll
-Windows.Mirage.Internal.dll
-Windows.Perception.Stub.dll
+;虚拟现实（影响商店应用下载，如不需要商店，可删除 ; ）
+;InputController.dll
+;PerceptionDevice.dll
+;PerceptionSimulation$
+;PerceptionSimulation.ProxyStubs.dll
+;PerceptionSimulationExtensions.dll
+;PerceptionSimulationManager.dll
+;SharedRealitySvc.dll
+;SpatialStore.dll
+;Spectrum.exe
+;SpectrumSyncClient.dll
+;vac.dll
+;Windows.Devices.Perception.dll
+;Windows.Mirage.dll
+;Windows.Mirage.Internal.dll
+;Windows.Perception.Stub.dll(影响商店更新)
 ;付款和NFC管理器
 NfcCx.dll
 Microsoft-WindowsPhone-SEManagementProvider.dll
@@ -77,7 +84,6 @@ Windows.Payments.dll
 Windows-NFC-SEManagement$
 PaymentMediatorServiceProxy.dll
 SEMgrPS.dll
-Windows.Payments.dll
 ;零售演示内容
 RetailDemo$
 RDXService.dll

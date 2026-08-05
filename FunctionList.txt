@@ -1,37 +1,36 @@
 【以下是移除的可选功能】
-;内侧会员
+
+; Microsoft Edge WebView2（Platform）
+Microsoft-Edge-WebView-FOD-Package
+; 旧版 Windows Media Player（应用）
+Microsoft-Windows-MediaPlayer-Package
+; 内侧会员
 Microsoft-Windows-InsiderHub-Package
-;邮件同步引擎
+; 邮件同步引擎
 Microsoft-OneCore-ApplicationModel-Sync-Desktop-FOD-Package
-;人脸遗留资源
+; 人脸遗留资源
 Microsoft-Windows-Hello-Face-Migration-Package
 Microsoft-Windows-Hello-Face-Package
-;中文手写和笔
+; 中文手写和笔
 Microsoft-Windows-LanguageFeatures-Handwriting-zh-cn-Package
-;光学字符识别
+; 光学字符识别
 Microsoft-Windows-LanguageFeatures-OCR-zh-cn-Package
-;Cortana语音识别
+; Cortana语音识别
 Microsoft-Windows-LanguageFeatures-Speech-zh-cn-Package
-;Cortana 、文本到语音转换和讲述人
+; Cortana 、文本到语音转换和讲述人
 Microsoft-Windows-LanguageFeatures-TextToSpeech-zh-cn-Package
-;快速助手
-;Microsoft-Windows-QuickAssist-Package
-;零售演示
+; 零售演示
 Microsoft-Windows-RetailDemo-OfflineContent-Content-Package
 Microsoft-Windows-RetailDemo-OfflineContent-Content-zh-cn-Package
-;数学识别器
+; 数学识别器
 Microsoft-Windows-TabletPCMath-Package
-;OpenSSH 客户端
+; OpenSSH 客户端
 OpenSSH-Client-Package
-;画图
-;Microsoft-Windows-MSPaint-FoD-Package
-;集成脚本环境
-;Microsoft-Windows-PowerShell-ISE-FOD-Package
-;步骤记录器
+; 步骤记录器
 Microsoft-Windows-StepsRecorder-Package
-;用户体验包
-;Microsoft-Windows-UserExperience-Desktop-Package
-;写字板
+; 写字板
 ;Microsoft-Windows-WordPad-FoD-Package
-;Microsoft Edge WebView2（Platform）
-Microsoft-Edge-WebView-FOD-Package
+; 画图
+;Microsoft-Windows-MSPaint-FoD-Package
+; 快速助手
+;Microsoft-Windows-QuickAssist-Package

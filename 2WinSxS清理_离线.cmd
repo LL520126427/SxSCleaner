@@ -186,7 +186,7 @@ set "Tweak=%Path_Helper%\Tweak.exe"
 set "_Path_Image=%~dp0Mount_%random%"
 
 :: 测试用
-:: set "_Path_Image=%~dp0Mount_3032"
+:: set "_Path_Image=%~dp0Mount_29204"
 
 call :LogInfo 脚本版本: %~n0 %Scr_Ver%
 call :LogInfo 处理器架构: %PROCESSOR_ARCHITECTURE%
@@ -200,14 +200,6 @@ set ImageFile=
 set MUI=zh-CN
 
 :: 设置离线参数
-set Flag_Plus=1
-set Flag_RemoveA=1
-set Flag_RemoveC=1
-set Flag_RemoveF=1
-set Flag_Retain=1
-set Flag_Import=1
-set Flag_SuperLite=1
-
 set txt1=WinSXSFoldersList
 set txt2=WinSxSFilesList
 set txt3=WinSXSExclude
@@ -215,8 +207,18 @@ set txt3=WinSXSExclude
 :: 选择镜像
 :SelectImage
 call :LogInfo 开始选择镜像文件. . .
-set SelectImage=mshta "about:<input type=file id=f><script>f.click();new ActiveXObject('Scripting.FileSystemObject').GetStandardStream(1).Write(f.value);window.close();</script>"
-for /f "tokens=* delims=" %%f in ('%SelectImage%') do set "ImageFile=%%f"
+:: 使用 PowerShell 显示文件选择对话框
+for /f "usebackq delims=" %%i in (`powershell -sta -command "Add-Type -AssemblyName System.Windows.Forms; $f = New-Object System.Windows.Forms.OpenFileDialog; $f.Filter = '映像文件(*.wim)|*.wim|所有文件(*.*)|*.*'; if ($f.ShowDialog() -eq [System.Windows.Forms.DialogResult]::OK) { $f.FileName } else { '' } "`) do (
+    set "ImageFile=%%i"
+)
+
+:: echo ============================================================
+:: echo [信息] 请输入 镜像文件 路径 例：D:\install.wim
+:: echo [信息] 或者将 镜像文件 拖进来
+:: echo ============================================================
+:: echo [信息] 输入路径，按回车(Enter)
+:: set /p ImageFile=:
+
 if "%ImageFile%" equ "" (
     call :LogWarning 未选择镜像文件，退出脚本
     goto :Exit
@@ -237,6 +239,7 @@ for /f "tokens=1 delims=	 " %%f in ('dism /English /Get-ImageInfo /ImageFile:"%I
 for /f "tokens=3 delims= " %%v in ('dism /English /Get-ImageInfo /ImageFile:"%ImageFile%" /Index:%ImageIndex% ^| findstr /i /c:"Version :"') do set CurBuild=%%v
 for /f "tokens=2 delims=: " %%c in ('dism /English /Get-ImageInfo /ImageFile:"%ImageFile%" /Index:%ImageIndex% ^| findstr /i /c:"Architecture"') do set Arch=%%c
 for /f "tokens=3 delims=." %%f in ('echo %CurBuild%') do set "HostBuild=%%f"
+for /f "tokens=1-2 delims=." %%f in ('echo %CurBuild%') do set "ShortBuild=%%f.%%g"
 
 call :LogInfo 获取映像信息. . .
 call :LogInfo 目标: %ImageFile%
@@ -254,7 +257,8 @@ if not exist %_Path_Image% (
 )
 
 call :LogInfo 开始挂载映像. . .
-if not exist "%_Path_Image%\Windows" dism /Mount-Image /ImageFile:"%ImageFile%" /Index:%ImageIndex% /MountDir:"%_Path_Image%"
+if not exist "%_Path_Image%\Windows" call :MountImage "%ImageFile%", %ImageIndex%, "%_Path_Image%"
+
 if !errorlevel! neq 0 (
     call :LogError 挂载映像失败，错误代码: !errorlevel!
     goto :Exit
@@ -273,7 +277,7 @@ call :LogInfo Windows功能配置完成
 call :LogInfo 开始处理隐藏组件. . .
 set "RegCBS=HKLM\TMP_SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing"
 reg load HKLM\TMP_SOFTWARE "%_Path_Image%\Windows\System32\config\SOFTWARE" %nul%
-for /f "tokens=*" %%l in ('dir /b /o-d "%_Path_Image%\Windows\%PathRel_Packages%\*16385*.mum"') do (
+for /f "tokens=*" %%l in ('dir /b /a-d "%_Path_Image%\Windows\%PathRel_Packages%\*16385*.mum"') do (
     %NSudo% reg delete "%RegCBS%\PackagesPending\%%~nl" /f
     %NSudo% reg delete "%RegCBS%\Packages\%%~nl" /f
     %NSudo% cmd /c del /f /q "%_Path_Image%\Windows\%PathRel_Packages%\%%~nl.*"
@@ -295,7 +299,27 @@ dir /b /a-d "%_Path_Image%\Windows\System32\smartscreen.exe" | findstr /i "smart
     reg add "HKLM\TMP_SOFTWARE\Policies\Microsoft\Windows Defender\SmartScreen" /f /v "ConfigureAppInstallControl" /t REG_SZ /d "Anywhere"
 )
 
-for /f %%i in (%ImportList%) do call :ShowComponent "%%i"
+:: 检测是否安装 .NET Framework 4.0 以上的框架
+if [%Flag_REMode%] == [2] (
+    set "NetPath=%SystemRoot%\Microsoft.NET\Framework"
+    for /f "delims=" %%n in ('dir /ad /b "%NetPath%\v4.*"') do if not exist "%NetPath%\%%n\csc.exe" set Flag_REMode=1
+)
+
+::优先 使用预置列表
+if exist %CurBuild%\%Arch%\%txt3%.txt (
+    set Flag_Retain=0
+    xcopy /y "%CurBuild%\%Arch%\%txt3%.txt" .\
+)
+if exist %CurBuild%\%Arch%\%txt1%.txt if exist %CurBuild%\%Arch%\%txt2%.txt (
+   set Flag_Import=0
+   xcopy /y "%CurBuild%\%Arch%\%txt1%.txt" .\
+   xcopy /y "%CurBuild%\%Arch%\%txt2%.txt" .\
+)
+xcopy /y "%CurBuild%\*.txt" ..\
+
+if /i [%Flag_REMode%] == [1] (
+    for /f %%i in (%ImportList%) do call :ShowComponent "%%i"
+)
 
 set "EdgePath=%_Path_Image%\Program Files\Microsoft"
 if %arch% equ x64 set "EdgePath=%_Path_Image%\Program Files (x86)\Microsoft"
@@ -303,25 +327,55 @@ if not exist "%EdgePath%\Edge" set "Flag_Edge=0"
 
 if /i [%Flag_Edge%] == [1] (
     call :LogInfo 删除新版Edge浏览器. . .
+    echo reg delete "HKLM\TMP_SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Microsoft Edge" /f
     %NSudo% reg delete "HKLM\TMP_SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Microsoft Edge" /f
+    echo reg delete "HKLM\TMP_SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Microsoft Edge Update" /f
     %NSudo% reg delete "HKLM\TMP_SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Microsoft Edge Update" /f
+    echo reg delete "HKLM\TMP_SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Microsoft EdgeWebView" /f
     %NSudo% reg delete "HKLM\TMP_SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Microsoft EdgeWebView" /f
+    echo reg delete "HKLM\TMP_SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Microsoft Edge Update" /f
     %NSudo% reg delete "HKLM\TMP_SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Microsoft Edge" /f
+    echo reg delete "HKLM\TMP_SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Microsoft Edge Update" /f
     %NSudo% reg delete "HKLM\TMP_SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Microsoft Edge Update" /f
+    echo reg delete "HKLM\TMP_SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Microsoft EdgeWebView" /f
     %NSudo% reg delete "HKLM\TMP_SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Microsoft EdgeWebView" /f
+    echo rd /s /q "%EdgePath%"
     %NSudo% cmd /c rd /s /q "%EdgePath%"
 )
 
+:: 如果移除 Defender 则删除 Windows 安全中心 启动项
+type %ImportList% %nul2% | findstr /i "Windows-Defender" |findstr ";" || (
+    echo reg delete "HKLM\TMP_SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /f /v "SecurityHealth"
+    %NSudo% cmd /c reg delete "HKLM\TMP_SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /f /v "SecurityHealth"
+)
+
+:: 关闭预留空间
+reg add "HKLM\TMP_SOFTWARE\Microsoft\Windows\CurrentVersion\ReserveManager" /f /v "ShippedWithReserves" /t REG_DWORD /d 0
+
+:: 关闭恶意软件MRT删除工具自动安装
+%NSudo% reg add "HKLM\TMP_SOFTWARE\Policies\Microsoft\MRT" /f /v "DontOfferThroughWUAU" /t REG_DWORD /d 1
+
 reg unload HKLM\TMP_SOFTWARE %nul%
+reg load HKLM\TMP_SYSTEM "%_Path_Image%\Windows\System32\config\SYSTEM" %nul%
+:: 关闭休眠
+reg add "HKLM\TMP_SYSTEM\ControlSet001\Control\Power" /f /v "HibernateEnabledDefault" /t REG_DWORD /d 0
+reg unload HKLM\TMP_SYSTEM %nul%
 call :LogInfo 隐藏组件处理完成
 
-if exist %CurBuild%\%Arch%\%txt3%.txt set Flag_Retain=0
-if exist %CurBuild%\%Arch%\%txt1%.txt if exist %CurBuild%\%Arch%\%txt2%.txt set Flag_Import=0
-if exist %CurBuild%\%Arch%\*.txt xcopy /y "%CurBuild%\%Arch%\*.txt" .\
-xcopy /y "%CurBuild%\*.txt" ..\
+:: 处理开始菜单中的 入门 和 Windows备份 图标
+if not exist "%_Path_Image%\Windows\SystemApps\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\appxmanifestbak.xml" if %HostBuild% geq 22000 (
+    call :LogInfo 隐藏开始菜单中的 入门 和 Windows备份 图标. . .
+    xcopy /y "%_Path_Image%\Windows\SystemApps\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\appxmanifest.xml" .\
+    echo "%Path_Helper%\RemoveAppxManifest.ps1" "appxmanifest.xml"
+    Powershell -noprofile -executionpolicy bypass -file "%Path_Helper%\RemoveAppxManifest.ps1" "appxmanifest.xml"
+    %NSudo% cmd /c move /y appxmanifest.xml "%_Path_Image%\Windows\SystemApps\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\appxmanifest.xml"
+)
 
 :: 组件列表导出
 call "%Path_Helper%\SxSExport-Mod.cmd"
+:: 去掉 WinSxSFoldersList.txt 中的版本号
+powershell -Command "Get-Content %txt1%.txt | ForEach-Object { ($_ -split "%ShortBuild%")[0] }| Out-File -Encoding Default _%txt1%.txt"
+move _%txt1%.txt %txt1%.txt
 
 if %HostBuild% leq 7601 (
     set Flag_RemoveA=0
@@ -337,11 +391,23 @@ if /i [%Flag_RemoveA%] == [1] (
     call :LogInfo 预装应用移除完成
 )
 
+:: 如果移除 商店 则删除 DesktopAppInstaller
+type %AppxList% %nul2% | findstr /i "Microsoft.WindowsStore" |findstr ";" || (
+    call :LogInfo 移除 桌面应用安装器（DesktopAppInstaller）. . .
+    call :RemoveAppx DesktopAppInstaller %nul%
+)
+
+:: 如果移除 Defender 则删除 Windows 安全中心
+type %ImportList% %nul2% | findstr /i "Windows-Defender" |findstr ";" || (
+    call :LogInfo 移除 Windows 安全中心（SecHealthUI）. . .
+    call :RemoveAppx SecHealthUI %nul%
+)
+
 :: 可选功能移除
 if /i [%Flag_RemoveF%] == [1] (
     call :LogInfo 开始移除可选功能. . .
     for /f %%i in (%FunctionList%) do (
-        call :RemoveFunction "%%i"
+        call :RemoveFunction%Flag_REMode% "%%i"
     )
     call :LogInfo 可选功能移除完成
 )
@@ -350,26 +416,10 @@ if /i [%Flag_RemoveF%] == [1] (
 if /i [%Flag_RemoveC%] == [1] (
     call :LogInfo 开始移除系统组件. . .
     for /f %%i in (%ImportList%) do (
-        call :RemoveComponent "%%i"
+        call :RemoveComponent%Flag_REMode% "%%i"
     )
-    rem call :FastRemove
+    rem if %HostBuild% geq 28000 call :FastRemove
     call :LogInfo 系统组件移除完成
-)
-
-:: 如果移除 商店 则删除 DesktopAppInstaller
-type %AppxList% %nul2% | findstr /i "Microsoft.WindowsStore" |findstr ";" || (
-    for /f "tokens=2 delims=: " %%f in ('%Dism% /English /Image:"%_Path_Image%" /Get-ProvisionedAppxPackages ^| findstr PackageName ^| findstr /i "DesktopAppInstaller"') do (
-        call :LogInfo 移除 桌面应用安装器
-        %Dism% /Image:"%_Path_Image%" /Remove-ProvisionedAppxPackage /PackageName:"%%f"
-    )
-)
-
-:: 如果移除 Defender 则删除 Windows 安全中心
-type %ImportList% %nul2% | findstr /i "Windows-Defender" |findstr ";" || (
-    for /f "tokens=2 delims=: " %%f in ('%Dism% /English /Image:"%_Path_Image%" /Get-ProvisionedAppxPackages ^| findstr PackageName ^| findstr /i "SecHealthUI"') do (
-    call :LogInfo 移除 Windows 安全中心
-    %Dism% /Image:"%_Path_Image%" /Remove-ProvisionedAppxPackage /PackageName:"%%f"
-    )
 )
 
 :: 删除多语言文件夹
@@ -389,7 +439,9 @@ for /f "tokens=*" %%i in ('dir /b /a-d "%_Path_Image%\Windows\WinSxS\Manifests\*
 )
 
 :: 排除列表
-for /f "tokens=1,2,3 delims=_" %%i in ('type WinSxSExclude.txt') do echo %%i_%%j_%%k>>_WinSxSExclude.txt
+for /f "tokens=1,2,3 delims=_" %%i in ('type WinSxSExclude.txt') do (
+    if "%%k" neq "" (echo %%i_%%j_%%k>>_WinSxSExclude.txt) else (echo %%i_%%j>>_WinSxSExclude.txt)
+)
 move _WinSxSExclude.txt WinSxSExclude.txt
 call :sort WinSxSExclude.txt
 
@@ -419,7 +471,8 @@ call :LogInfo 多语言文件处理完成
 
 :: 映像保存并卸载
 call :LogInfo 开始卸载并提交映像更改. . .
-dism /Unmount-Image /MountDir:"%_Path_Image%" /Commit
+call :UnMountImage "%_Path_Image%", "Commit"
+
 if !errorlevel! neq 0 (
     call :LogError 卸载映像失败，错误代码: !errorlevel!
     goto :Exit
@@ -440,11 +493,14 @@ call :grep "*.PNF" ImageList.txt multilang.txt
 :: 删除组件中WinSxS下的文件夹列表
 type WinSxSFoldersList.txt > WinSxSFiles.txt
 call :xfindstr WinSxSFiles.txt ImageFolderList.txt
-%grep% -Ff WinSxSFoldersList.txt ImageList.txt | findstr /i "Manifests" >> WinSxSFiles.txt
+:: %grep% -Ff WinSxSFoldersList.txt ImageList.txt | findstr /i "Manifests" >> WinSxSFiles.txt
 
 :: 删除组件中除WinSxS目录以外的文件列表
 %grep% -Ff WinSxSFilesList.txt ImageList.txt | findstr /i /v "winsxs" >> WinSxSFiles.txt
 call :vfindstr "Custom\FileRetainList.txt" WinSxSFiles.txt
+call :vfindstr WinSxSExclude.txt WinSxSFiles.txt
+call :vfindstr "Custom\ExtraWinSxSList.txt" WinSxSFiles.txt
+
 
 :: 未包含组件的文件夹/文件列表
 del /f /q DelFiles.txt %nul2%
@@ -474,6 +530,7 @@ call :LogInfo 生成WinSxS精简列表. . .
 if /i [%Flag_SuperLite%] == [1] (
     type ImageFolderList.txt|findstr /i "winsxs" >DelWinSxSFolders.txt
 )
+
 call :vfindstr "Custom\FileRetainList.txt" DelWinSxSFolders.txt
 call :vfindstr WinSxSFoldersList.txt DelWinSxSFolders.txt
 call :vfindstr WinSxSExclude.txt DelWinSxSFolders.txt
@@ -500,31 +557,39 @@ call :NormList DelWinSxSFolders.txt %wimupdate%
 
 :: 删除操作
 call :LogInfo 删除WinSxS文件. . .
-%wimlib% update "%ImageFile%" %ImageIndex% < WinSxSFiles.txt
+if exist WinSxSFiles.txt %wimlib% update "%ImageFile%" %ImageIndex% < WinSxSFiles.txt
 
 call :LogInfo 删除多语言文件. . .
-%wimlib% update "%ImageFile%" %ImageIndex% < multilang.txt
+if exist multilang.txt %wimlib% update "%ImageFile%" %ImageIndex% < multilang.txt
 
 call :LogInfo 删除其他文件. . .
-%wimlib% update "%ImageFile%" %ImageIndex% < DelFiles.txt
+if exist DelFiles.txt %wimlib% update "%ImageFile%" %ImageIndex% < DelFiles.txt
 
 call :LogInfo 删除WinSxS文件夹. . .
-%wimlib% update "%ImageFile%" %ImageIndex% < DelWinSxSFolders.txt
+if exist DelWinSxSFolders.txt %wimlib% update "%ImageFile%" %ImageIndex% < DelWinSxSFolders.txt
 
 if /i [%Flag_Empty%] == [1] (
     call :LogInfo 开始删除空目录. . .
     del /f /q _DelEmptyFolders.txt %nul2%
-    dism /Mount-Image /ImageFile:%ImageFile% /Index:%ImageIndex% /MountDir:%_Path_Image%
+    if not exist "%_Path_Image%\Windows" call :MountImage "%ImageFile%", %ImageIndex%, "%_Path_Image%"
     for /f "tokens=*" %%j in ('type DelEmptyFolders.txt') do (
         %NSudo% cmd /c rd "%_Path_Image%%%j"
         if not exist "%_Path_Image%%%j" echo "%%j">>_DelEmptyFolders.txt
     )
-    dism /Unmount-Image /MountDir:"%_Path_Image%" /Commit
+    if /i [%Flag_ComCleanup%] == [0] call :UnMountImage "%_Path_Image%", "Commit"
     move _DelEmptyFolders.txt DelEmptyFolders.txt
     call :sort DelEmptyFolders.txt
     call :LogInfo 空目录删除完成
 )
 
+if /i [%Flag_ComCleanup%] == [1] if %HostBuild% geq 9600 (
+    call :LogInfo 组件存储清理. . .
+    if not exist "%_Path_Image%\Windows" call :MountImage "%ImageFile%", %ImageIndex%, "%_Path_Image%"
+    echo dism /Image:"%_Path_Image%" /Cleanup-Image /AnalyzeComponentStore
+    dism /English /Image:"%_Path_Image%" /Cleanup-Image /AnalyzeComponentStore | find /i "Yes" && dism /Image:"%_Path_Image%" /Cleanup-Image /StartComponentCleanup
+)
+
+if exist "%_Path_Image%\Windows" call :UnMountImage "%_Path_Image%", "Commit" 
 rem del /f /q ImageList.txt ImageFolderList.txt %nul2%
 
 xcopy /y %txt1%.txt "%CurBuild%\%Arch%\"
@@ -534,18 +599,50 @@ xcopy /y %RetainList% "%CurBuild%\"
 xcopy /y %ImportList% "%CurBuild%\"
 
 for /f "tokens=*" %%i in ('dir /b /ad /s "%~dp0Mount*"') do %NSudo% cmd /c rd /s /q "%%i"
-
+if exist "%_Path_Image%\Windows" goto :exit
 :: 优化映像文件
 call :LogInfo 开始优化映像文件. . .
-%wimlib%  optimize %ImageFile% --recompress
+if not exist %wimlib% set Flag_optimize=1
+call :OptimizeImage%Flag_optimize%
 if !errorlevel! neq 0 (
     call :LogError 映像优化失败，错误代码: !errorlevel!
 ) else (
     call :LogInfo 映像优化完成
 )
-
+:exit
 call :LogInfo 脚本执行完成
 exit
+
+:: 挂载映像
+:: 输入参数 [ %~1 ：映像文件名称、%~2 ：映像索引编号、%~3 ：映像安装文件夹 ]
+:MountImage
+dism /Mount-Image /ImageFile:%~1 /Index:%~2 /MountDir:%~3
+goto :EOF
+
+:: 卸载映像
+:: 输入参数 [ %~1 ：映像安装文件夹、%~2 ：映像提交 / 丢弃选项 ]
+:UnMountImage
+echo dism /Unmount-Image /MountDir:"%~1" /%~2
+dism /Unmount-Image /MountDir:"%~1" /%~2
+goto :EOF
+
+:: 优化映像文件
+:OptimizeImage1
+set "Index=1"
+set "Dest_wim=%ImageFile%%random%"
+:NextImage
+dism /Get-Wiminfo /WimFile:"%ImageFile%" /Index:%Index% %nul% || (
+    move /y "%Dest_wim%" "%ImageFile%"
+    ping -n 3 127.1 %nul1%
+    exit /b
+)
+dism /Export-Image /SourceImageFile:"%ImageFile%" /SourceIndex:%Index% /DestinationImageFile:"%Dest_wim%" /Compress:max
+set /a Index+=1
+goto :NextImage
+
+:OptimizeImage2
+%wimlib% optimize %ImageFile% --recompress
+goto :EOF
 
 :dk_done
 echo 任意键退出
@@ -614,15 +711,30 @@ goto :EOF
 for /f "tokens=2 delims=: " %%f in ('%Dism% /English /Image:"%_Path_Image%" /Get-ProvisionedAppxPackages ^| findstr PackageName ^| findstr /i "%~1"') do (
     call :LogInfo 移除预装应用 [%~1]
     %Dism% /Image:"%_Path_Image%" /Remove-ProvisionedAppxPackage /PackageName:"%%f"
+    reg load HKLM\TMP_SOFTWARE "%_Path_Image%\Windows\System32\config\SOFTWARE" %nul%
+    reg query "HKLM\TMP_SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Applications" %nul2% | find "%%f" %nul% && (
+        %NSudo% reg delete "HKLM\TMP_SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Applications\%%f" /f
+        %NSudo% cmd /c rd /s /q "%_Path_Image%\Program Files\WindowsApps\%%f"
+        %NSudo% cmd /c rd /s /q "%_Path_Image%\Program Files\WindowsApps\*%~1*"
+    )
+    reg unload HKLM\TMP_SOFTWARE %nul%
 )
 goto :EOF
 
 :: 移除可选功能 [ %~1 : 功能名称 ]
-:RemoveFunction
+:RemoveFunction1
 :: for /f "tokens=3 delims=: " %%f in ('%Dism% /English /Image:"%_Path_Image%" /Get-Packages ^| find /i "%~1" ^|find "%_Arch%" ^|find /v "%MUI%"') do (
-for /f "tokens=*" %%f in ('dir /b /o-d "%_Path_Image%\Windows\%PathRel_Packages%\%~1~*.mum" %nul6% ^|find "%_Arch%" ^|find /v "%MUI%"') do (    
-    call :LogInfo 移除可选功能 [%~1]
-    %Dism% /Image:"%_Path_Image%" /Remove-Package /PackageName:"%%~nf"
+for /f "tokens=*" %%f in ('dir /b /o-d "%_Path_Image%\Windows\%PathRel_Packages%\%~1~*.mum" %nul6% ^|find "%_Arch%" ^|find /v "%MUI%"') do ( 
+    call :LogInfo 移除可选功能 [%%~nf]
+    %Dism% /Image:"%_Path_Image%" /Remove-Package /PackageName:"%%~nf" && goto :EOF
+)
+goto :EOF
+
+:RemoveFunction2
+:: dir /b /a-d "%_Path_Image%\Windows\%PathRel_Packages%\%~1~*.mum" %nul2% && (
+for /f "tokens=*" %%f in ('dir /b /o-d "%_Path_Image%\Windows\%PathRel_Packages%\%~1~*.mum" %nul6% ^|find "%_Arch%" ^|find /v "%MUI%"') do ( 
+    call :LogInfo 移除可选功能 [%%~nf]
+    %Tweak% /n /p "%_Path_Image%" /r /c "%%~nf"
 )
 goto :EOF
 
@@ -632,8 +744,9 @@ reg load HKLM\TMP_SOFTWARE "%_Path_Image%\Windows\System32\config\SOFTWARE" %nul
 for /f %%i in (%ImportList%) do call :Removemum "%%i"
 reg unload HKLM\TMP_SOFTWARE %nul%
 goto :EOF
+
 :Removemum
-for /f "tokens=*" %%l in ('dir /b /o-d "%_Path_Image%\Windows\%PathRel_Packages%\%~1~*.mum" %nul6%') do (
+for /f "tokens=*" %%l in ('dir /b /a-d "%_Path_Image%\Windows\%PathRel_Packages%\%~1~*.mum" %nul6%') do (
     %NSudo% reg delete "%RegCBS%\Packages\%%~nl" /f
     %NSudo% cmd /c del /f /q "%_Path_Image%\Windows\%PathRel_Packages%\%%~nl.*"
     %NSudo% cmd /c del /f /q "%_Path_Image%\Windows\System32\catroot\{F750E6C3-38EE-11D1-85E5-00C04FC295EE}\%%~nl.*"
@@ -642,7 +755,7 @@ goto :EOF
 
 :: 显示隐藏组件 [ %~1 : 组件名称 ]
 :ShowComponent
-for /f "tokens=*" %%l in ('dir /b /o-d "%_Path_Image%\Windows\%PathRel_Packages%\%~1~*.mum" %nul6% ^| findstr /i /v "%MUI% en-us"') do (
+for /f "tokens=*" %%l in ('dir /b /a-d "%_Path_Image%\Windows\%PathRel_Packages%\%~1~*.mum" %nul6% ^|find /i "%PROCESSOR_ARCHITECTURE%" ^| find /v "%MUI%"') do (
     echo [信息] 显示隐藏组件 [%%~nl]
     %NSudo% reg add "%RegCBS%\Packages\%%~nl" /v Visibility /t REG_DWORD /d 1 /f
     %NSudo% reg add "%RegCBS%\Packages\%%~nl" /v DefVis /t REG_DWORD /d 2 /f
@@ -652,17 +765,18 @@ for /f "tokens=*" %%l in ('dir /b /o-d "%_Path_Image%\Windows\%PathRel_Packages%
 goto :EOF
 
 :: 移除系统组件 [ %~1 : 组件名称 ]
-:RemoveComponent2
-dir /b /o-d "%_Path_Image%\Windows\%PathRel_Packages%\%~1~*.mum" %nul2% && (
-    call :LogInfo 移除系统组件 [%~1]
-    %Tweak% /n /p "%_Path_Image%" /r /c "%~1" %nul%
+:RemoveComponent1
+for /f "tokens=3 delims=: " %%f in ('%Dism% /English /Image:"%_Path_Image%" /Get-Packages ^| findstr /i "%~1" ^| findstr /i /v "%MUI%" ^| findstr /i "%_Arch%"') do (
+    call :LogInfo 移除系统组件 [%%f]
+    %Dism% /Image:"%_Path_Image%" /Remove-Package /PackageName:"%%f" /Quiet
 )
 goto :EOF
 
-:RemoveComponent
-for /f "tokens=3 delims=: " %%f in ('%Dism% /English /Image:"%_Path_Image%" /Get-Packages ^| findstr /i "%~1" ^| findstr /i /v "%MUI%" ^| findstr /i "%_Arch%"') do (
-    call :LogInfo 移除系统组件 [%~1]
-    %Dism% /Image:"%_Path_Image%" /Remove-Package /PackageName:"%%f"
+:RemoveComponent2
+:: dir /b /a-d "%_Path_Image%\Windows\%PathRel_Packages%\%~1~*.mum" %nul2% && (
+for /f "tokens=*" %%f in ('dir /b /o-d "%_Path_Image%\Windows\%PathRel_Packages%\%~1~*.mum" %nul6% ^|find "%_Arch%" ^|find /v "%MUI%"') do ( 
+    call :LogInfo 移除系统组件 [%%~nf]
+    %Tweak% /n /p "%_Path_Image%" /r /c "%%~nf"
 )
 goto :EOF
 

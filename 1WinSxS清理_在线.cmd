@@ -175,7 +175,7 @@ cls
 set "LOG_FILE=%~dp0WinSXS_Clean_Online.log"
 :: 第二次重启标志
 set Flag_Restart=
-if exist "%~dp0WinSxSList\Flag_Restart1" set Flag_Restart=1
+if exist "%~dp0WinSxSList\Flag_Restart*" set Flag_Restart=1
 ::type %LOG_FILE% %nul2% | findstr /i %~n0 && set Flag_Restart=1
 if not defined Flag_Restart call :InitializeLogging
 
@@ -188,9 +188,10 @@ set "Dism=Dism.exe /NoRestart /LogLevel:1"
 set "FCopy=%Path_Helper%\%PROCESSOR_ARCHITECTURE%\FastCopy.exe"
 set "MSEdge=%Path_Helper%\setup.exe"
 set "Tweak=%Path_Helper%\Tweak.exe"
+set "StartCleanup=%Path_Helper%\StartCleanup.cmd"
 
 if not defined Flag_Restart (
-	call :LogInfo 脚本版本: %Scr_Ver%
+	call :LogInfo 脚本版本: %~n0 %Scr_Ver%
 	call :LogInfo 处理器架构: %PROCESSOR_ARCHITECTURE%
 	call :LogInfo 辅助工具路径: %Path_Helper%
 )
@@ -205,23 +206,22 @@ set _Path_Image=C:
 set MUI=zh-CN
 
 :: 设置在线参数
-set Flag_Plus=1
-set Flag_RemoveA=1
-set Flag_RemoveC=1
-set Flag_RemoveF=1
-set Flag_Retain=1
-set Flag_Import=1
-set Flag_SuperLite=1
-
 set txt1=WinSXSFoldersList
 set txt2=WinSxSFilesList
 set txt3=WinSXSExclude
+set ReStart_Num=0
 
 for /f "tokens=6" %%m in ('dism /English /Online /Get-Intl ^| find /i "Default system UI language"') do set "MUI=%%m"
 for /f "tokens=4-6 delims=[]. " %%s in ('ver') do set CurBuild=%%s.%%t.%%u
 for /f "tokens=3 delims=." %%f in ('echo %CurBuild%') do set "HostBuild=%%f"
+for /f "tokens=1-2 delims=." %%f in ('echo %CurBuild%') do set "ShortBuild=%%f.%%g"
+
 set "Arch=x86"
 if exist "%WinDir%\SysWOW64" set "Arch=x64"
+
+set "EdgePath=%ProgramFiles%\Microsoft"
+if %arch% equ x64 set "EdgePath=%ProgramFiles(x86)%\Microsoft"
+if not exist "%EdgePath%\Edge" set "Flag_Edge=0"
 
 if not defined Flag_Restart (
 	call :LogInfo 获取系统信息. . .
@@ -238,73 +238,112 @@ if /i [%_Path_Image%] == [%HOMEDRIVE%] if not exist Flag_Restart* (
     echo 即将开始，请确认. . .
     echo.
     if exist "%_Path_Image%\Windows\System32\SecurityHealthSystray.exe" (
-        echo [信息] 您的Defender防病毒软件可能会阻止脚本. . .
-        echo [信息] 临时关闭 Windows 安全中心 的【实时防护】. . .
+        echo Powershell Add-MpPreference -ExclusionPath "\"%~dp0\""
         Powershell Add-MpPreference -ExclusionPath "\"%~dp0\"" %nul2%
-        Powershell -noprofile -executionpolicy bypass -file "%Path_Helper%\WinDefCtl.ps1" rtp off %nul2%
     )
     pause
-    taskkill /f /im SecHealthUI* %nul2%
 )
 
-if not defined Flag_Restart call :LogInfo 配置Windows功能. . .
-for /f "tokens=* delims=" %%i in ('type "Custom\EnFeatureList.txt"') do call :EnableFeature "%%i"
-for /f "tokens=* delims=" %%i in ('type "Custom\DisFeatureList.txt"') do call :DisableFeature "%%i"
+:: 禁用网络
+for /f "tokens=1 delims=," %%a in ('Getmac /v /nh /fo csv') do netsh interface set interface %%a disabled
 
-:: 系统服务调整
-if not defined Flag_Restart call :LogInfo 开始调整系统服务和安全设置. . .
+:: 关闭预留空间
+dism /English /Online /Get-ReservedStorageState | find /i "enabled" && dism /Online /Set-ReservedStorageState /State:Disabled %nul%
 
 :: 生成重启标志
 if exist Flag_Restart1 goto :Restart1
+if exist Flag_Restart2 goto :Restart2
 
 :: UAC调整
 :: reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /f /v "ConsentPromptBehaviorAdmin" /t REG_DWORD /d 0
 :: reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /f /v "PromptOnSecureDesktop" /t REG_DWORD /d 0
+
+:: 如果移除 Defender 则删除 Windows 安全中心
+type %ImportList% %nul2% |findstr /v ";" |findstr /i "Windows-Defender" && (
+    call :LogInfo 删除 Windows 安全中心（SecHealthUI）. . .
+    echo "%Path_Helper%\RemoveApp.ps1" -remove_appx SecHealthUI
+    %NSudo% cmd /c Powershell -noprofile -executionpolicy bypass -file "%Path_Helper%\RemoveApp.ps1" -remove_appx SecHealthUI
+    powershell -Command "Get-AppxPackage *SecHealthUI* -AllUsers | Remove-AppxPackage -AllUsers"
+    powershell -Command "Get-AppxPackage *SecHealthUI* -AllUsers | Remove-AppxPackage"
+    for /r %%f in (Custom\DefenderRemover\*.reg) do (
+        echo "%%f"
+        %NSudo% cmd /c regedit.exe /s "%%f"
+    )
+    for /r %%f in (Custom\DefenderRemover\*.reg) do regedit.exe /s "%%f" %nul2%
+    set /a ReStart_Num+=1
+) || (
+    if exist "%_Path_Image%\Windows\System32\SecurityHealthSystray.exe" (
+        echo [信息] 您的Defender防病毒软件可能会阻止脚本. . .
+        echo [信息] 临时关闭 Windows 安全中心 的【实时防护】和【篡改防护】. . .
+        Powershell -noprofile -executionpolicy bypass -file "%Path_Helper%\WinDefCtl.ps1" all off %nul2%
+        taskkill /f /im SecHealthUI* %nul2%
+        goto :Restart1
+    )
+)
+
+call :LogInfo 设置第%ReStart_Num%次重启后自动运行. . .
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce" /f /v "%~n0" /t REG_SZ /d "%~0"
+reg query "HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce" | findstr /i "%~n0" && echo.>Flag_Restart%ReStart_Num%
+
+call :LogInfo %~n0 准备第%ReStart_Num%次重启系统. . .
+shutdown -r -t 6 -c "稍后自动重启系统. . ."
+exit
+
+:Restart1
+if exist Flag_Restart1 (set /a ReStart_Num+=2) else (set /a ReStart_Num+=1)
+:: 杀毒单独处理，移除 Defender 文件
+type %ImportList% %nul2% |findstr /v ";" |findstr /i "Windows-Defender" && (
+    echo rd /s /q "C:\ProgramData\Microsoft\Windows Defender"
+    %NSudo% cmd /c rd /s /q "C:\ProgramData\Microsoft\Windows Defender"
+    echo rd /s /q "C:\Program Files\Windows Defender"
+    %NSudo% cmd /c rd /s /q "C:\Program Files\Windows Defender"
+    echo rd /s /q "C:\Program Files (x86)\Windows Defender"
+    %NSudo% cmd /c rd /s /q "C:\Program Files (x86)\Windows Defender"
+    echo rd /s /q "C:\Program Files\Windows Defender Advanced Threat Protection"
+    %NSudo% cmd /c rd /s /q "C:\Program Files\Windows Defender Advanced Threat Protection"
+)
+
+:: 系统服务调整
+if not defined Flag_Restart call :LogInfo 开始调整系统服务和安全设置. . .
+
+call :LogInfo 配置Windows功能. . .
+for /f "tokens=* delims=" %%i in ('type "Custom\EnFeatureList.txt"') do call :EnableFeature "%%i"
+for /f "tokens=* delims=" %%i in ('type "Custom\DisFeatureList.txt"') do call :DisableFeature "%%i"
 
 :: 安全中心
 dir /b /a-d "%_Path_Image%\Windows\System32\SecurityHealthSystray.exe" %nul2% | findstr /i "SecurityHealthSystray" && (
     call :LogInfo 禁用安全中心服务. . .
     taskkill /f /im SecurityHealthSystray.exe /t %nul2%
     %NSudo% reg add "HKLM\SYSTEM\CurrentControlSet\Services\SecurityHealthService" /f /v "Start" /t REG_DWORD /d 4
+    %NSudo% reg add "HKLM\SOFTWARE\Policies\Microsoft\MRT" /f /v "DontOfferThroughWUAU" /t REG_DWORD /d 1
 )
 
-sc stop WinDefend %nul%
-sc config WinDefend start= disabled %nul%
+:: 关闭恶意软件MRT删除工具自动安装
+%NSudo% reg add "HKLM\SOFTWARE\Policies\Microsoft\MRT" /f /v "DontOfferThroughWUAU" /t REG_DWORD /d 1
+
+%NSudo% reg add "HKLM\SYSTEM\CurrentControlSet\Services\WinDefend" /f /v "Start" /t REG_DWORD /d 4
 sc stop wscsvc %nul%
 sc config wscsvc start= disabled %nul%
-
-:: 如果移除 Defender 则删除 Windows 安全中心
-type %ImportList% %nul2% |findstr /v ";" |findstr /i "Windows-Defender" && (
-    call :LogInfo 删除 Windows 安全中心. . .
-    %NSudo% cmd /c Powershell -noprofile -executionpolicy bypass -file "%Path_Helper%\RemoveSecHealthApp.ps1"
-    %NSudo% cmd /c reg import "%Path_Helper%\RemoveDefender.reg"
-    %NSudo% cmd /c reg import "%Path_Helper%\RemoveShellAssociation.reg"
-    %NSudo% cmd /c reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender Security Center\Notifications" /v DisableNotifications /t REG_DWORD /d 1 /f
-    %NSudo% cmd /c reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender" /f /v "DisableAntiSpyware" /t REG_DWORD /d 1
-    %NSudo% cmd /c reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection" /f /v "DisableRealtimeMonitoring" /t REG_DWORD /d 1
-    %NSudo% cmd /c reg delete "HKLM\SYSTEM\CurrentControlSet\Services\wscsvc" /f
-    %NSudo% cmd /c reg delete "HKLM\SYSTEM\CurrentControlSet\Services\SecurityHealthService" /f
-    %NSudo% cmd /c reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /f /v "SecurityHealth"
-)
 
 :: Edge 任务计划、服务禁用
 taskkill /f /im MicrosoftEdgeUpdate.exe /t %nul2% && (
     call :LogInfo 禁用Edge更新服务. . .
-    for /f "tokens=1 delims=," %%t in ('schtasks /query /fo csv ^|find /i "edgeupdate"') do SchTasks /change /TN "%%t" /disable %nul2%
-    sc config edgeupdate start= disabled %nul%
-    sc config edgeupdatem start= disabled %nul%
+    for /f "tokens=1 delims=," %%t in ('schtasks /query /fo csv ^|find /i "edgeupdate"') do %NSudo% cmd /c SchTasks /change /TN "%%t" /disable
+    %NSudo% reg add "HKLM\SYSTEM\CurrentControlSet\Services\edgeupdate" /f /v "Start" /t REG_DWORD /d 4
+    %NSudo% reg add "HKLM\SYSTEM\CurrentControlSet\Services\edgeupdatem" /f /v "Start" /t REG_DWORD /d 4
 )
 
 :: 云盘
 taskkill /f /im OneDrive* /t %nul2% && (
     call :LogInfo 卸载OneDrive. . .
     for /f "tokens=3* delims= " %%o in ('reg query "HKCU\Software\Microsoft\Windows\CurrentVersion\Uninstall\OneDriveSetup.exe" %nul6% ^| findstr /i "UninstallString"') do %NSudo% cmd /c %%o %%p
+    for /f "tokens=3* delims= " %%o in ('reg query "HKLM\Software\Microsoft\Windows\CurrentVersion\Uninstall\OneDriveSetup.exe" %nul6% ^| findstr /i "UninstallString"') do %NSudo% cmd /c %%o %%p
+    echo %SystemRoot%\System32\OneDriveSetup.exe /uninstall
+    call %SystemRoot%\System32\OneDriveSetup.exe /uninstall %nul2%
+    echo %SystemRoot%\SysWOW64\OneDriveSetup.exe /uninstall
+    if %arch% equ x64 call %SystemRoot%\SysWOW64\OneDriveSetup.exe /uninstall %nul2%
     timeout /t 5 %nul1%
 )
-
-call :LogInfo 设置重启后自动运行. . .
-reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce" /f /v "%~n0" /t REG_SZ /d "%~0"
-reg query "HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce" | findstr /i "%~n0" && echo.>Flag_Restart1
 
 :: 显示隐藏组件
 call :LogInfo 处理隐藏组件. . .
@@ -329,31 +368,59 @@ dir /b /a-d "%_Path_Image%\Windows\System32\smartscreen.exe" %nul2% | findstr /i
     %NSudo% cmd /c ren "%_Path_Image%\Windows\System32\smartscreen.exe" smartscreen.bak
 )
 
-for /f %%i in (%ImportList%) do call :ShowComponent "%%i"
+::优先 使用预置列表
+if exist %CurBuild%\%Arch%\%txt3%.txt (
+    set Flag_Retain=0
+    xcopy /y "%CurBuild%\%Arch%\%txt3%.txt" .\
+)
+if exist %CurBuild%\%Arch%\%txt1%.txt if exist %CurBuild%\%Arch%\%txt2%.txt (
+   set Flag_Import=0
+   xcopy /y "%CurBuild%\%Arch%\%txt1%.txt" .\
+   xcopy /y "%CurBuild%\%Arch%\%txt2%.txt" .\
+)
+xcopy /y "%CurBuild%\*.txt" ..\
 
-set "EdgePath=%ProgramFiles%\Microsoft"
-if %arch% equ x64 set "EdgePath=%ProgramFiles(x86)%\Microsoft"
-if not exist "%EdgePath%\Edge" set "Flag_Edge=0"
+if /i [%Flag_REMode%] == [1] (
+    for /f %%i in (%ImportList%) do call :ShowComponent "%%i"
+)
 
 if /i [%Flag_Edge%] == [1] (
     call :LogInfo 删除新版Edge浏览器. . .
+    echo %MSEdge% --uninstall --system-level --force-uninstall
     start /w %MSEdge% --uninstall --system-level --force-uninstall
+    echo %MSEdge% --uninstall --msedgewebview --system-level --force-uninstall
     start /w %MSEdge% --uninstall --msedgewebview --system-level --force-uninstall
     %NSudo% cmd /c del /f /q "%HOMEPATH%\Desktop\Microsoft Edge.lnk"
     %NSudo% cmd /c del /f /q "%PUBLIC%\Desktop\Microsoft Edge.lnk"
+    echo rd /s /q "%EdgePath%\EdgeCore"
+    %NSudo% cmd /c rd /s /q "%EdgePath%\EdgeCore"
+    echo rd /s /q "%EdgePath%\Temp"
+    %NSudo% cmd /c rd /s /q "%EdgePath%\Temp"
 )
-
-if exist %CurBuild%\%Arch%\%txt3%.txt set Flag_Retain=0
-if exist %CurBuild%\%Arch%\%txt1%.txt if exist %CurBuild%\%Arch%\%txt2%.txt set Flag_Import=0
-xcopy /y "%CurBuild%\%Arch%\*.txt" .\
-xcopy /y "%CurBuild%\*.txt" ..\
 
 :: 组件列表导出
 call "%Path_Helper%\SxSExport-Mod.cmd"
+:: 去掉 WinSxSFoldersList.txt 中的版本号
+powershell -Command "Get-Content %txt1%.txt | ForEach-Object { ($_ -split "%ShortBuild%")[0] }| Out-File -Encoding Default _%txt1%.txt"
+move _%txt1%.txt %txt1%.txt
+
+:: 检测是否安装 .NET Framework 4.0 以上的框架
+if [%Flag_REMode%] == [2] (
+    set "NetPath=%SystemRoot%\Microsoft.NET\Framework"
+    for /f "delims=" %%n in ('dir /ad /b "%NetPath%\v4.*"') do if not exist "%NetPath%\%%n\csc.exe" set Flag_REMode=1
+)
 
 if %HostBuild% leq 7601 (
     set Flag_RemoveA=0
     set Flag_RemoveF=0
+)
+
+:: 如果移除 商店 则删除 DesktopAppInstaller
+type %AppxList% %nul2% | findstr /i "Microsoft.WindowsStore" |findstr ";" || (
+    call :LogInfo 移除 桌面应用安装器（DesktopAppInstaller）. . .
+    %NSudo% cmd /c Powershell -noprofile -executionpolicy bypass -file "%Path_Helper%\RemoveApp.ps1" -remove_appx DesktopAppInstaller
+    powershell -Command "Get-AppxPackage *DesktopAppInstaller* -AllUsers | Remove-AppxPackage -AllUsers"
+    powershell -Command "Get-AppxPackage *DesktopAppInstaller* -AllUsers | Remove-AppxPackage"
 )
 
 :: 预装应用移除
@@ -369,7 +436,7 @@ if /i [%Flag_RemoveA%] == [1] (
 if /i [%Flag_RemoveF%] == [1] (
     call :LogInfo 开始移除可选功能. . .
     for /f %%i in (%FunctionList%) do (
-        call :RemoveFunction "%%i"
+        call :RemoveFunction%Flag_REMode% "%%i"
     )
     call :LogInfo 可选功能移除完成
 )
@@ -378,35 +445,50 @@ if /i [%Flag_RemoveF%] == [1] (
 if /i [%Flag_RemoveC%] == [1] (
     call :LogInfo 开始移除系统组件. . .
     for /f %%i in (%ImportList%) do (
-        call :RemoveComponent "%%i"
+        call :RemoveComponent%Flag_REMode% "%%i"
+        rem if %HostBuild% geq 28000 call :Removemum "%%i"
     )
-    rem call :FastRemove
     call :LogInfo 系统组件移除完成
 )
 
 :: 清理多余的开始菜单
 call :LogInfo 清理多余的开始菜单. . .
 if not exist "%LOCALAPPDATA%\Packages\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\LocalState\start2bak.bin" (
-  copy /y "%LOCALAPPDATA%\Packages\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\LocalState\start2.bin" "%LOCALAPPDATA%\Packages\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\LocalState\start2bak.bin"
-  copy /y "%Path_Helper%\start2.bin" "%LOCALAPPDATA%\Packages\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\LocalState\"
+    copy /y "%LOCALAPPDATA%\Packages\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\LocalState\start2.bin" "%LOCALAPPDATA%\Packages\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\LocalState\start2bak.bin"
+    copy /y "%Path_Helper%\start2.bin" "%LOCALAPPDATA%\Packages\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\LocalState\"
 )
 for /f "tokens=* delims=" %%i in ('reg query "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\CloudStore\Store\Cache\DefaultAccount" %nul6% ^|findstr /i "start.tilegrid"') do (
   %NSudo% reg export "%%i\Current" %LOCALAPPDATA%\Packages\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\LocalState\StartLayout.reg
   reg add "%%i\Current" /f /v "Data" /t REG_BINARY /d 02000000bf33a44a2af9db0100000000434201000a0a00d0140cca3200e22c010100cd14120a01267b00380038003000310042003400390035002d0045003000370034002d0034004400370033002d0039003300370041002d003100340030003700320043003000360045003000370033007d000a0595e986c00824f4c00344f39a016693f5d1b8c0c581f07300ca1e100400ca5010043004000000
 )
+:: 删除第一次重启标志
+del /f /q Flag_Restart1 %nul2%
 
-call :LogInfo %~n0 准备重启系统. . .
-timeout /t 5 %nul1%
-shutdown -r -t 0
-goto :EOF
+call :LogInfo 设置第%ReStart_Num%次重启后自动运行. . .
+reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce" /f /v "%~n0" /t REG_SZ /d "%~0"
+reg query "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce" | findstr /i "%~n0" && echo.>Flag_Restart2
 
-:Restart1
-call :LogInfo 第二阶段开始执行（重启后）. . .
+:: 关闭休眠
 powercfg.exe -h off
+:: 关闭预留空间
+dism /English /Online /Get-ReservedStorageState | find /i "enabled" && dism /Online /Set-ReservedStorageState /State:Disabled %nul2%
+
+call :LogInfo %~n0 准备第%ReStart_Num%次重启系统. . .
+shutdown -r -t 6 -c "稍后自动重启系统. . ."
+exit
+
+:Restart2
+call :LogInfo 第二阶段开始执行. . .
+:: 关闭预留空间
+dism /English /Online /Get-ReservedStorageState | find /i "enabled" && dism /Online /Set-ReservedStorageState /State:Disabled %nul%
 :: 删除多语言文件夹
 call :LogInfo 开始处理多语言文件. . .
 del /f /q multilang.txt multilangFolder.txt %nul2%
 for /f "tokens=*" %%i in ('dir /b /ad "%_Path_Image%\Windows\System32\*??-??*" %nul6% ^|findstr /i /v "en-US zh-CHS zh-HANS qps %MUI%"') do (
+    echo %%i
+    echo \%%i>>multilangFolder.txt
+)
+for /f "tokens=*" %%i in ('dir /b /ad "%_Path_Image%\Windows\SysWOW64\*??-??*" %nul6% ^|findstr /i /v "en-US zh-CHS zh-HANS qps %MUI%"') do (
     echo %%i
     echo \%%i>>multilangFolder.txt
 )
@@ -420,7 +502,9 @@ for /f "tokens=*" %%i in ('dir /b /a-d "%_Path_Image%\Windows\WinSxS\Manifests\*
 
 :: 排除列表
 call :LogInfo 生成排除列表. . .
-for /f "tokens=1,2,3 delims=_" %%i in ('type WinSxSExclude.txt') do echo %%i_%%j_%%k>>_WinSxSExclude.txt
+for /f "tokens=1,2,3 delims=_" %%i in ('type WinSxSExclude.txt') do (
+    if "%%k" neq "" (echo %%i_%%j_%%k>>_WinSxSExclude.txt) else (echo %%i_%%j>>_WinSxSExclude.txt)
+)
 move _WinSxSExclude.txt WinSxSExclude.txt
 call :sort WinSxSExclude.txt
 
@@ -443,6 +527,11 @@ for /f "tokens=*" %%i in ('type "Custom\SystemApps.txt"') do (
 echo "%_Path_Image%\Windows\WinSxS\Backup">>multilangFolder.txt
 dir /b /a-d "%_Path_Image%\Windows\WinSxS\Catalogs\*.*" >>multilang.txt
 dir /b /a-d "%_Path_Image%\Windows\WinSxS\FileMaps\*.*" >>multilang.txt
+dir /b /a-d "%_Path_Image%\Windows\*.log" >>multilang.txt
+dir /b /a-d /s "%_Path_Image%\Windows\SoftwareDistribution" >>multilang.txt
+dir /b /a-d /s "%_Path_Image%\Windows\Temp" >>multilang.txt
+dir /b /a-d /s "%_Path_Image%\Windows\System32\LogFiles" >>multilang.txt
+dir /b /a-d /s "%LOCALAPPDATA%\Temp" >>multilang.txt
 
 :: 生成文件列表
 call :LogInfo 生成系统文件列表. . .
@@ -453,11 +542,13 @@ dir /a /b /ad /s "%_Path_Image%\" > ImageFolderList.txt
 :: 删除组件中WinSxS下的文件夹列表
 type WinSxSFoldersList.txt > WinSxSFiles.txt
 call :xfindstr WinSxSFiles.txt ImageFolderList.txt
-%grep% -Ff WinSxSFoldersList.txt ImageList.txt | findstr /i "Manifests" >> WinSxSFiles.txt
+:: %grep% -Ff WinSxSFoldersList.txt ImageList.txt | findstr /i "Manifests" >> WinSxSFiles.txt
 
 :: 删除组件中除WinSxS目录以外的文件列表
 %grep% -Ff WinSxSFilesList.txt ImageList.txt | findstr /i /v "winsxs" >> WinSxSFiles.txt
 call :vfindstr "Custom\FileRetainList.txt" WinSxSFiles.txt
+call :vfindstr WinSxSExclude.txt WinSxSFiles.txt
+call :vfindstr "Custom\ExtraWinSxSList.txt" WinSxSFiles.txt
 
 :: 未包含组件的文件夹/文件列表
 del /f /q DelFiles.txt %nul2%
@@ -502,21 +593,21 @@ call :sort DelEmptyFolders.txt
 call :LogInfo 开始执行文件删除操作. . .
 
 call :LogInfo 删除WinSxS文件. . .
-call :FastCopy "WinSxSFiles.txt"
+if exist WinSxSFiles.txt call :FastCopy "WinSxSFiles.txt"
 
 call :LogInfo 删除多语言文件. . .
-call :FastCopy "multilang.txt"
+if exist multilang.txt call :FastCopy "multilang.txt"
 
 call :LogInfo 删除WinSxS文件夹. . .
-call :FastCopy "DelWinSxSFolders.txt"
-del /f /q Flag_Restart1 %nul2%
+if exist DelWinSxSFolders.txt call :FastCopy "DelWinSxSFolders.txt"
+del /f /q Flag_Restart2 %nul2%
 
 call :LogInfo 删除其他文件. . .
-call :FastCopy "DelFiles.txt"
+if exist DelFiles.txt call :FastCopy "DelFiles.txt"
 
 call :LogInfo 删除空目录. . .
 for /f "tokens=*" %%j in ('type DelEmptyFolders.txt') do (
-    %NSudo% cmd /c rd "%%j" %nul2%
+    %NSudo% cmd /c rd "%%j"
     if not exist "%%j" echo 已删除空目录: %%j
 )
 
@@ -532,7 +623,36 @@ timeout /t 5 %nul1%
 taskkill /f /im FastCopy.exe /t %nul2%
 del /f /q "%Path_Helper%\%PROCESSOR_ARCHITECTURE%\fastcopy_*.*" %nul2%
 
-call :LogInfo "在线清理完成"
+type %ImportList% %nul2% |findstr /v ";" |findstr /i "OneDrive-Setup" && (
+    taskkill /f /im OneDrive* /t %nul2%
+    for /f "tokens=3* delims= " %%o in ('reg query "HKLM\Software\Microsoft\Windows\CurrentVersion\Uninstall\OneDriveSetup.exe" %nul6% ^| findstr /i "UninstallString"') do %NSudo% cmd /c %%o %%p
+    echo rd /s /q "%ProgramFiles%\Microsoft OneDrive"
+    %NSudo% cmd /c rd /s /q "%ProgramFiles%\Microsoft OneDrive"
+    echo rd /s /q "%ProgramFiles%\Microsoft\OneDrive"
+    %NSudo% cmd /c rd /s /q "%ProgramFiles%\Microsoft\OneDrive"
+)
+   
+if /i [%Flag_Edge%] == [1] (
+    %NSudo% cmd /c del /f /q "%HOMEPATH%\Desktop\Microsoft Edge.lnk"
+    %NSudo% cmd /c del /f /q "%PUBLIC%\Desktop\Microsoft Edge.lnk"
+    echo rd /s /q "%EdgePath%\EdgeCore"
+    %NSudo% cmd /c rd /s /q "%EdgePath%\EdgeCore"
+    echo rd /s /q "%EdgePath%\Temp"
+    %NSudo% cmd /c rd /s /q "%EdgePath%\Temp"
+)
+
+:: 启用网络
+for /f "tokens=1 delims=," %%a in ('Getmac /v /nh /fo csv') do netsh interface set interface %%a enabled
+
+:: dism 组件存储清理，进一步减少 WinSxS 文件夹占用
+if /i [%Flag_ComCleanup%] == [1] if %HostBuild% geq 9600 (
+    call :LogInfo 组件存储清理. . .
+    echo dism /Online /Cleanup-Image /StartComponentCleanup
+    dism /English /Online /Cleanup-Image /StartComponentCleanup |find /i "pending" && reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce" /f /v "%~n0" /t REG_SZ /d "C:\Windows\system32\cmd.exe /c \"%StartCleanup%\""
+    shutdown -r -t 6 -c "稍后自动重启系统 清理组件存储. . ." 
+)
+
+call :LogInfo 在线清理完成
 :: choice /T 6 /C yn /M "重启请按 y，否请按 n，不选默认重启。" /D y
 exit
 
@@ -602,16 +722,33 @@ goto :EOF
 for /f "tokens=2 delims=: " %%f in ('dism /English /online /Get-ProvisionedAppxPackages ^| findstr PackageName ^| findstr /i "%~1"') do (
     call :LogInfo 移除预装应用 [%~1]
     %Dism% /online /Remove-ProvisionedAppxPackage /PackageName:"%%f"
-    powershell Remove-AppxPackage -all %%f %nul1%
+    powershell Remove-AppxPackage -all "%%f"
+    reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Applications" %nul2% | find "%%f" %nul% && (
+        %NSudo% cmd /c Powershell -noprofile -executionpolicy bypass -file "%Path_Helper%\RemoveApp.ps1" -remove_appx %~1
+        powershell Remove-AppxPackage -AllUsers "%%f"
+        powershell Remove-AppxPackage "%%f"
+        %NSudo% cmd /c rd /s /q "%_Path_Image%\Program Files\WindowsApps\%%f"
+    )
+    for /f "tokens=*" %%f in ('dir /b /ad /s "%_Path_Image%\Program Files\WindowsApps\*%~1*" %nul6%') do %NSudo% cmd /c rd /s /q "%%f"
 )
 goto :EOF
 
 :: 移除可选功能 [ %~1 : 功能名称 ]
-:RemoveFunction
-:: for /f "tokens=3 delims=: " %%f in ('%Dism% /English /Online /Get-Packages ^|find /i "%~1" ^|find /i "%PROCESSOR_ARCHITECTURE%" ^|find /v "%MUI%"') do (
-for /f "tokens=*" %%f in ('dir /b /o-d "%_Path_Image%\Windows\%PathRel_Packages%\%~1~*.mum" %nul6% ^| find /i "%~1" ^|find /i "%PROCESSOR_ARCHITECTURE%" ^|find /v "%MUI%"') do (
-    call :LogInfo 移除可选功能 [%~1]
-    %Dism% /Online /Remove-Package /PackageName:"%%~nf"
+:RemoveFunction1
+:: for /f "tokens=3 delims=: " %%f in ('dism /English /Online /Get-Packages ^|find /i "%~1" ^|find /i "%PROCESSOR_ARCHITECTURE%" ^|find /v "%MUI%"') do (
+for /f "tokens=*" %%f in ('dir /b /a-d "%_Path_Image%\Windows\%PathRel_Packages%\%~1~*.mum" %nul6% ^|find /i "%PROCESSOR_ARCHITECTURE%" ^|find /v "%MUI%"') do (
+    reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\%%~nf" /v "CurrentState" %nul2% | find "0x70" %nul% && (
+        call :LogInfo 移除可选功能 [%%~nf]
+        %Dism% /Online /Remove-Package /PackageName:"%%~nf"
+    )
+)
+goto :EOF
+
+:RemoveFunction2
+:: dir /b /a-d "%_Path_Image%\Windows\%PathRel_Packages%\%~1~*.mum" %nul2% && (
+for /f "tokens=*" %%f in ('dir /b /o-d "%_Path_Image%\Windows\%PathRel_Packages%\%~1~*.mum" %nul6% ^|find /i "%PROCESSOR_ARCHITECTURE%" ^|find /v "%MUI%"') do (
+    call :LogInfo 移除可选功能 [%%~nf]
+    %Tweak% /o /c "%%~nf" /r
 )
 goto :EOF
 
@@ -622,7 +759,7 @@ for /f %%i in (%ImportList%) do call :Removemum "%%i"
 goto :EOF
 
 :Removemum
-for /f "tokens=*" %%l in ('dir /b /o-d "%_Path_Image%\Windows\%PathRel_Packages%\%~1*.mum" %nul6%') do (
+for /f "tokens=*" %%l in ('dir /b /a-d "%_Path_Image%\Windows\%PathRel_Packages%\%~1*.mum" %nul6%') do (
     %NSudo% reg delete "%RegCBS%\Packages\%%~nl" /f
     %NSudo% cmd /c del /f /q "%_Path_Image%\Windows\%PathRel_Packages%\%%~nl.*"
     %NSudo% cmd /c del /f /q "%_Path_Image%\Windows\System32\catroot\{F750E6C3-38EE-11D1-85E5-00C04FC295EE}\%%~nl.*"
@@ -631,7 +768,7 @@ goto :EOF
 
 :: 显示隐藏组件 [ %~1 : 组件名称 ]
 :ShowComponent
-for /f "tokens=*" %%l in ('dir /b /o-d "%_Path_Image%\Windows\%PathRel_Packages%\%~1~*.mum" %nul6% ^| findstr /i /v "%MUI% en-us"') do (
+for /f "tokens=*" %%l in ('dir /b /a-d "%_Path_Image%\Windows\%PathRel_Packages%\%~1~*.mum" %nul6% ^|find /i "%PROCESSOR_ARCHITECTURE%" ^| find /v "%MUI%"') do (
     echo [信息] 显示隐藏组件 [%%~nl]
     %NSudo% reg add "%RegCBS%\Packages\%%~nl" /v Visibility /t REG_DWORD /d 1 /f
     %NSudo% reg add "%RegCBS%\Packages\%%~nl" /v DefVis /t REG_DWORD /d 2 /f
@@ -641,17 +778,17 @@ for /f "tokens=*" %%l in ('dir /b /o-d "%_Path_Image%\Windows\%PathRel_Packages%
 goto :EOF
 
 :: 移除系统组件 [ %~1 : 组件名称 ]
-:RemoveComponent2
-dir /b /o-d "%_Path_Image%\Windows\%PathRel_Packages%\%~1~*.mum" %nul2% && (
-    call :LogInfo 移除系统组件 [%~1]
-    %Tweak% /o /c "%~1" /r %nul%
+:RemoveComponent1
+for /f "tokens=3 delims=: " %%f in ('dism /English /Online /Get-Packages ^| findstr /i "%~1~" ^| findstr /v "%MUI%"') do (
+    call :LogInfo 移除系统组件 [%%f]
+    %Dism% /Online /Remove-Package /PackageName:"%%f" /Quiet
 )
 goto :EOF
 
-:RemoveComponent
-for /f "tokens=3 delims=: " %%f in ('%Dism% /English /Online /Get-Packages ^| findstr /i "%~1" ^| findstr /i /v "%MUI%"') do (
-    call :LogInfo 移除系统组件 [%~1]
-    %Dism% /Online /Remove-Package /PackageName:"%%f"
+:RemoveComponent2
+for /f "tokens=*" %%f in ('dir /b /o-d "%_Path_Image%\Windows\%PathRel_Packages%\%~1~*.mum" %nul6% ^|find /i "%PROCESSOR_ARCHITECTURE%" ^|find /v "%MUI%"') do (
+    call :LogInfo 移除系统组件 [%%~nf]
+    %Tweak% /o /c "%%~nf" /r
 )
 goto :EOF
 

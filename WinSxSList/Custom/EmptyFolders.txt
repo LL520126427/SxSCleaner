@@ -1,4 +1,6 @@
 ;保留的空文件夹列表
+\Windows\System32\Dism
+\Windows\SysWOW64\Dism
 \Windows\rescache
 \Windows\rescache\_merged
 \ProgramData\Microsoft\Device Stage\Device\{113527a4-45d4-4b6f-b567-97838f1b04b0}
