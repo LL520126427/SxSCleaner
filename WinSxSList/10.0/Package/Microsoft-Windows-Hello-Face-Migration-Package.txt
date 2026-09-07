@@ -1,0 +1,7 @@
+\FaceRecognitionEngineAdapterLegacyV1Resources.dll
+\FaceRecognitionEngineAdapterResources.dll
+\FaceRecognitionEngineAdapterResources_v2.dll
+\FaceRecognitionEngineAdapterResources_v3.dll
+\HelloFaceMigration.cat
+\HelloFaceMigration.inf
+_microsoft-windows-hello-face-migration_31bf3856ad364e35

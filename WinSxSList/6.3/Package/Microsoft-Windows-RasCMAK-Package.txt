@@ -1,0 +1,18 @@
+\cmak.exe
+\cmak.exe.mui
+\cmbins.exe
+\cmexcept.cat
+\cmproxy.dll
+\cmroute.dll
+\Connection Manager Administration Kit.lnk
+\instcm.inf
+\quarchk.cmd
+\rqc.exe
+\rqc.exe.mui
+\template.cmp
+\template.cms
+\template.inf
+\template.sed
+_microsoft-windows-rascmak-unicode_31bf3856ad364e35
+_microsoft-windows-rascmak.resources_31bf3856ad364e35
+_microsoft-windows-rascmak_31bf3856ad364e35

@@ -1,0 +1,2 @@
+\msrdc.dll
+_microsoft-windows-rdc_31bf3856ad364e35

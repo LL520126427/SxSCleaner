@@ -1,0 +1,6 @@
+\credits.rtf
+\OOBE_HELP_Cortana_Learn_More.rtf
+\privacy.rtf
+_microsoft-windows-h..atement_r.resources_31bf3856ad364e35
+_microsoft-windows-h..learnmore.resources_31bf3856ad364e35
+_microsoft-windows-help-credits.resources_31bf3856ad364e35

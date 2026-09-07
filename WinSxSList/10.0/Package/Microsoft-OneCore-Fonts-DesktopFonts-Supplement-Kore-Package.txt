@@ -1,0 +1,4 @@
+\malgunbd.ttf
+\malgunsl.ttf
+_microsoft-windows-f..lgungothicsemilight_31bf3856ad364e35
+_microsoft-windows-f..pe-malgungothicbold_31bf3856ad364e35

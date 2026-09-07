@@ -1,0 +1,2 @@
+\MsOcrRes.orp
+_microsoft-windows-ocr-zh-hans-cn-main_31bf3856ad364e35

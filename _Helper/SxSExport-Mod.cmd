@@ -22,7 +22,7 @@ if /i [%_Path_Image%] == [%HOMEDRIVE%] (
 	set Flag_Online=1
 	set Online=/Online
 	set SOFTWARE=SOFTWARE
-	for /f "tokens=6" %%m in ('dism /English /Online /Get-Intl ^| find /i "Default system UI language"') do set "MUI=%%m"
+	for /f "tokens=3 delims= " %%l in ('reg query "HKEY_CURRENT_USER\Control Panel\International" ^|find /i "LocaleName"') do set "MUI=%%l"
 	for /f "tokens=4-6 delims=[]. " %%s in ('ver') do set CurBuild=%%s.%%t.%%u
 	set "Arch=x86"
 	if exist "%WinDir%\SysWOW64" set "Arch=x64"
@@ -33,12 +33,12 @@ if /i [%_Path_Image%] == [%HOMEDRIVE%] (
 	for /f "tokens=*" %%a in ('reg query "HKLM\SOFTWARE\Microsoft\WIMMount\Mounted Images"') do (
 		for /f "tokens=*" %%b in ('reg query "%%a"^|findstr /i "%_Path_Image%"') do set MountPath=%%a
 	)
-	for /f "tokens=4*" %%i in ('reg query "!MountPath!" /v "WIM Path"') do set wimpath=%%i
+	for /f "delims=" %%w in ('powershell -c ^ "(Get-ItemProperty ($env:MountPath -replace '^HKEY_LOCAL_MACHINE','HKLM:') -Name 'WIM Path').'WIM Path'"') do set "wimpath=%%w"
 	for /f "tokens=4*" %%i in ('reg query "!MountPath!" /v "Image Index"') do set /a ImageIndex= %%i
-	for /f "tokens=1 delims=	 " %%m in ('dism /English /Get-ImageInfo /ImageFile:"!wimpath!" /Index:!ImageIndex! ^| find /i "Default"') do set MUI=%%m
-	for /f "tokens=3 delims= " %%v in ('dism /English /Get-ImageInfo /ImageFile:"!wimpath!" /Index:!ImageIndex! ^| findstr /i /c:"Version :"') do set CurBuild=%%v
-	for /f "tokens=2 delims=: " %%c in ('dism /English /Get-ImageInfo /ImageFile:"!wimpath!" /Index:!ImageIndex! ^| findstr /i /c:"Architecture"') do set Arch=%%c
-	dism /Get-MountedImageInfo | findstr /i "%_Path_Image%" || exit
+	for /f "tokens=1 delims=	 " %%m in ('dism /English /Get-WimInfo /WimFile:"!wimpath!" /Index:!ImageIndex! ^| find /i "Default"') do set MUI=%%m
+	for /f "tokens=3 delims= " %%v in ('dism /English /Get-WimInfo /WimFile:"!wimpath!" /Index:!ImageIndex! ^| findstr /i /c:"Version :"') do set CurBuild=%%v
+	for /f "tokens=2 delims=: " %%c in ('dism /English /Get-WimInfo /WimFile:"!wimpath!" /Index:!ImageIndex! ^| findstr /i /c:"Architecture"') do set Arch=%%c
+	dism /Get-MountedWimInfo | findstr /i "%_Path_Image%" || exit
 )
 
 set RegCBS=HKLM\%SOFTWARE%\Microsoft\Windows\CurrentVersion\Component Based Servicing
@@ -46,23 +46,19 @@ set "_Null=1>nul 2>nul"
 
 echo.
 echo 位置: %_Path_Image% 版本: %CurBuild% 语言: %MUI% 类型: %Arch%
-
-rem if /i [%_Path_Image%] == [%HOMEDRIVE%\] if /i [%Flag_Plus%] == [1] pause
+set "_Arch=x86"
+if %Arch% equ x64 set "_Arch=amd64"
 set "Path_Image=%_Path_Image%\Windows"
 
 :: 工作流程
-if /i [%Flag_Plus%] == [1] (
-	if /i %Flag_Retain%==1 (
-		del /f /q "..\WinSxSList\%txt3%.txt" 2>nul
-		call :AutoExportCheck %RetainList% "%txt3%"
-	)
-	if /i %Flag_Import%==1 (
-		del /f /q "..\WinSxSList\%txt1%.txt" 2>nul
-		del /f /q "..\WinSxSList\%txt2%.txt" 2>nul
-		call :AutoExportCheck %ImportList% "%txt1%" "%txt2%"
-	)
+:: for /f "tokens=4 delims=_" %%i in ('dir /b /o-d "%Path_Image%\inSxS\Manifests\%_Arch%_microsoft-windows-international-core_*.manifest"') do set BaseVersion=%%i
+
+if exist "%~1" (
+	call :AutoExportCheck "%~1"
 	exit /b
 )
+exit /b
+
 call :AutoExportCheck %ImportList%
 call :AskImagePath Path_Image
 call :PackagesEnum "BaseMUM"
@@ -110,19 +106,20 @@ if exist "%~1" (
 	call :TextIntro	"自动导出模式..."
 	call :TextOutro	"仅找到并导出显示的包。"
 	for /f %%i in (%~1) do (
-		call :PackageAutoSearch "%%i" "~~" "%~2" "%~3"
-		call :PackageAutoSearch "%%i" "~%MUI%~" "%~2" "%~3"
+		call :PackageAutoSearch "%%i" "~~" "%%i"
+		call :PackageAutoSearch "%%i" "~%MUI%~" "%%i"
+		if exist ..\WinSxSList\%%i.txt %sort% -u ..\WinSxSList\%%i.txt -o ..\WinSxSList\%%i.txt
 	)
 	call :ThrowMessage "完成"
 )
 goto :EOF
 
 :PackageAutoSearch
-for /f "tokens=*" %%l in ('dir /b /o-d "%Path_Image%\%PathRel_Packages%\%~1~*%~2*.mum" 2^>nul') do (
+for /f "tokens=*" %%l in ('dir /b /o-d "%Path_Image%\%PathRel_Packages%\%~1~*%~2*%BaseVersion%.mum" 2^>nul ^|findstr /i /v "IIS-WebServer"') do (
 	REM 没有“for”项目会立即停止。
 	if ErrorLevel 1 (goto :EOF)
 	call :PackageExport "%%~nl" "%~3" "%~4"
-	goto :EOF
+	REM goto :EOF
 )
 goto :EOF
 
@@ -148,8 +145,13 @@ if /i [%Flag_Log%] == [1] (
 	if not exist "%Path_Export%\%Folder_PathExport%" md "%Path_Export%\%Folder_PathExport%"
 	set "LogFile=%Path_Export%\%Folder_PathExport%\%File_ExportName%.log"
 	) else (set "LogFile=nul")
-if [%~2] neq [] set "ExportFolder=%~2.txt"
-if [%~3] neq [] set "ExportFile=%~3.txt"
+if [%~2] neq [] (
+	set "ExportFolder=%~2.txt"
+)
+if [%~3] neq [] (
+	set "ExportFile=%~3.txt"
+)
+
 %Tool_SxSExtract% /IMAGE:"%Path_Image%" %Parameter_SxSExtract% "%Path_Image%\%PathRel_Packages%\%~1.mum" "%Path_ExportFile%" "%ExportFolder%" "%ExportFile%"> %LogFile%
 timeout.exe /t 2 > nul
 if exist "%File_ExportName%" (

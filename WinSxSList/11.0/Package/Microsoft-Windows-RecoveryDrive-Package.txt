@@ -1,0 +1,7 @@
+\recovery.dll
+\RecoveryDrive.exe
+\RecoveryDrive.lnk
+\windlp.dll
+_microsoft-windows-recoverycenter-core_31bf3856ad364e35
+_microsoft-windows-recoverydrive_31bf3856ad364e35
+_microsoft-windows-windlp-inbox_31bf3856ad364e35

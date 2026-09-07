@@ -1,0 +1,2 @@
+\ActivationVdev.dll
+_microsoft-windows-s..y-spp-virtualdevice_31bf3856ad364e35

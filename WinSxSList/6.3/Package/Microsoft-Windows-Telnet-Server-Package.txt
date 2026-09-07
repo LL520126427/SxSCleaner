@@ -1,0 +1,17 @@
+\login.cmd
+\Telnet-Server-ppdlic.xrm-ms
+\termcap
+\TFTP.EXE
+\tlntadmn.exe
+\TlntAdmn.exe.mui
+\tlntsess.exe
+\tlntSess.exe.mui
+\tlntsvr.exe
+\TlntSvr.exe.mui
+_microsoft-windows-t..-deployment-package_31bf3856ad364e35
+_microsoft-windows-t..-tlntsess.resources_31bf3856ad364e35
+_microsoft-windows-t..et-server.resources_31bf3856ad364e35
+_microsoft-windows-t..r-tlntsvr.resources_31bf3856ad364e35
+_microsoft-windows-telnet-server-tlntsess_31bf3856ad364e35
+_microsoft-windows-telnet-server-tlntsvr_31bf3856ad364e35
+_microsoft-windows-telnet-server_31bf3856ad364e35

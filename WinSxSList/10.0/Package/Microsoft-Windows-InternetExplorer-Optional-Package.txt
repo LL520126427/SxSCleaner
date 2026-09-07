@@ -1,0 +1,4 @@
+\iexplore.exe
+\iexplore.exe.mui
+_microsoft-windows-i..-optional.resources_31bf3856ad364e35
+_microsoft-windows-i..etexplorer-optional_31bf3856ad364e35

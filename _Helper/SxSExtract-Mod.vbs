@@ -466,25 +466,11 @@ Sub FindReferencedAssemblies(AXML, APath, AInFoldersListName)
 	Next
 End Sub
 
-Sub ExtractPossibleAssemblyFolders(AWildcard, AInFoldersListName)
+Sub ExtractPossibleAssemblyFolders(AWildcard)
 	Dim Loop2
 
 	Dim SourceList
 	Dim TargetFolder
-	
-	' 生成组件的winsxs文件夹列表
-	Dim FoldersListPath
-	Dim FoldersList
-	Dim WinStyle
-	Dim TheCommand
-	
-	' 当前脚本的上级目录 WinSxSList 生成 winsxs文件夹列表
-	FoldersListPath = FSO.BuildPath(FSO.GetFolder(".."&"\WinSxSList").Path, AInFoldersListName)
-	If MakingFoldersList then
-		If Not FSO.FileExists(FoldersListPath) Then
-			Set FoldersList = FSO.CreateTextFile(FoldersListPath, TRUE, FALSE)
-		End If
-	End If
 	
 	SourceList = MatchWildcard(AWildcard)
 	If Not IsEmpty(SourceList) Then
@@ -494,22 +480,6 @@ Sub ExtractPossibleAssemblyFolders(AWildcard, AInFoldersListName)
 				Call LogInfo("找到关联的程序集文件夹：" & _
 					FSO.GetFileName(SourceList(Loop2)))
 				TargetFolder = FSO.GetFileName(SourceList(Loop2))
-				
-				' 开始生成 winsxs 文件夹列表
-				If MakingFoldersList then
-					If Not FSO.FileExists(FoldersListPath) Then
-						Set FoldersList = FSO.CreateTextFile(FoldersListPath, TRUE, FALSE)
-					End If
-					If DebugMode Then
-						WinStyle = 1
-					Else
-						WinStyle = 0
-					End If
-					TheCommand = "CMD.EXE /C echo " & TargetFolder & ">>" & FoldersListPath
-					Call LogDebug("执行：" & TheCommand)
-					Shell.Run TheCommand, WinStyle, TRUE
-				End If
-
 				Call CopyListAdd(SourceList(Loop2), TargetFolder)
 			End If
 		Next
@@ -542,6 +512,14 @@ Function RecurseManifestHierarchy(APackageName, APublicKeyToken, AArch, ALang, A
 	Dim FileFlag
 	Dim ArraySize
 	
+	' 生成组件的winsxs文件夹列表
+	Dim FoldersListPath
+	Dim FoldersList
+	Dim WinStyle
+	Dim TheCommand
+	' 当前脚本的上级目录 WinSxSList 生成 winsxs文件夹列表
+	FoldersListPath = FSO.BuildPath(FSO.GetFolder(".."&"\WinSxSList").Path, AInFoldersListName)
+
 	SxSPath = FSO.BuildPath(SystemRoot, "\WinSxS")
 	RecurseManifestHierarchy = FALSE
 
@@ -625,7 +603,6 @@ Function RecurseManifestHierarchy(APackageName, APublicKeyToken, AArch, ALang, A
 			AssemblyArch = CurrentElement.GetAttribute("processorArchitecture")
 			AssemblyLang = CurrentElement.GetAttribute("language")
 			AssemblyVersion =  CurrentElement.GetAttribute("version")
-
 			' 安全检查
 			If Not FirstFile Then
 				If (APackageName = AssemblyName) And _
@@ -688,13 +665,31 @@ Function RecurseManifestHierarchy(APackageName, APublicKeyToken, AArch, ALang, A
 			If FSO.FileExists(SourceFile) Then
 				Call CopyListAdd(SourceFile, TargetFile)
 			End If
-	
+
+			' 开始生成 winsxs 文件夹列表 2026.4.27
+			If MakingFoldersList then
+				If Not FSO.FileExists(FoldersListPath) Then
+					Set FoldersList = FSO.CreateTextFile(FoldersListPath, TRUE, FALSE)
+				End If
+				If DebugMode Then
+					WinStyle = 1
+				Else
+					WinStyle = 0
+				End If
+				If Right(TargetFile, 4) = ".mum" Then
+				Else
+					TheCommand = "CMD.EXE /C echo " & Replace(TargetFile, ".manifest", "") & ">>" & FoldersListPath
+					Call LogDebug("执行：" & TheCommand)
+					Shell.Run TheCommand, WinStyle, TRUE
+				End If
+			End If
+
 			' 复制任何SxS程序集文件夹（当然）。如果是.mum文件，请将文件名转换为程序集ID格式。清单已经是程序集ID格式，但我仍然要与它们进行前缀匹配。
 			Call LogInfo("正在查找可能的关联程序集文件夹。")
 			ArraySize = CopyList.Count
 			Call ExtractPossibleAssemblyFolders(FSO.BuildPath(SxSPath, _
 				CreateAssemblyIDWildcard(AssemblyName, AssemblyPublicKeyToken, _
-				AssemblyArch, AssemblyLang, AssemblyVersion)), AInFoldersListName)
+				AssemblyArch, AssemblyLang, AssemblyVersion)))
 
 			If ViciousHacks Then
 				' 允许提取TFTP客户端
@@ -705,7 +700,7 @@ Function RecurseManifestHierarchy(APackageName, APublicKeyToken, AArch, ALang, A
 					Call ExtractPossibleAssemblyFolders(FSO.BuildPath(SxSPath, _
 						CreateAssemblyIDWildcard(AssemblyName & "-Package", _
 						AssemblyPublicKeyToken, AssemblyArch, AssemblyLang, _
-						AssemblyVersion)), AInFoldersListName)
+						AssemblyVersion)))
 				End If
 
 				' 允许提取适用于 Windows 8.x 的Adobe Flash。
@@ -717,7 +712,7 @@ Function RecurseManifestHierarchy(APackageName, APublicKeyToken, AArch, ALang, A
 						CreateAssemblyIDWildcard(Replace(AssemblyName, _
 						"-Package", "", 1, -1, vbTextCompare), _
 						AssemblyPublicKeyToken, AssemblyArch, AssemblyLang, _
-						AssemblyVersion)), AInFoldersListName)
+						AssemblyVersion)))
 				End If
 			End If
 

@@ -1,0 +1,10 @@
+\kdhv1394.dll
+\vmbkmcl.sys
+\vmbus.sys
+\VmbusCoinstaller.dll
+\vmbuspipe.dll
+\vmbusres.dll
+\winhv.sys
+\wvmbus.inf
+_microsoft-windows-b..ebuggertransport-hv_31bf3856ad364e35
+_wvmbus.inf_31bf3856ad364e35

@@ -1,0 +1,10 @@
+\PresentationHost.exe
+\PresentationHostProxy.dll
+\ServiceModel.mof
+\ServiceModel.mof.uninstall
+\ServiceModel35.mof
+\ServiceModel35.mof.uninstall
+_netfx4-servicemodel_mof_files_b03f5f7f11d50a3a
+_netfx4-servicemodel35_mof_files_b03f5f7f11d50a3a
+_wpf-presentationhostexe_31bf3856ad364e35
+_wpf-presentationhostproxy_31bf3856ad364e35

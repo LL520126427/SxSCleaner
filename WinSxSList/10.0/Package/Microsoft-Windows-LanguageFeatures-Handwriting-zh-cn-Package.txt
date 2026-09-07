@@ -1,0 +1,11 @@
+\chs_alist.lex.bin
+\chsac2.lex.bin
+\chslm.lex.bin
+\chslm.wdic2.bin
+\chsvir.lex.bin
+\imchxlm.dll
+\mshwchs.dll
+\mshwchsr.dll
+\ThirdPartyNotices.zh-cn.txt
+_microsoft-windows-t..nkrecognition.zh-cn_31bf3856ad364e35
+_microsoft-windows-t..reinkrecognition.zh_31bf3856ad364e35

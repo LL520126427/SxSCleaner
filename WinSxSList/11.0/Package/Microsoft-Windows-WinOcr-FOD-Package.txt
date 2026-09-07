@@ -1,0 +1,6 @@
+\SearchOCR.adml
+\SearchOCR.admx
+\tifffilt.dll
+_microsoft-windows-w..ilter-adm.resources_31bf3856ad364e35
+_microsoft-windows-winocr-tifffilter-adm_31bf3856ad364e35
+_microsoft-windows-winocr-tifffilter_31bf3856ad364e35

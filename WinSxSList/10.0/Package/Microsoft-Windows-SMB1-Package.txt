@@ -1,0 +1,6 @@
+\mrxsmb10.sys
+\srv.sys
+\srv.sys.mui
+_microsoft-windows-smb10-minirdr_31bf3856ad364e35
+_microsoft-windows-smbserver-v1.resources_31bf3856ad364e35
+_microsoft-windows-smbserver-v1_31bf3856ad364e35

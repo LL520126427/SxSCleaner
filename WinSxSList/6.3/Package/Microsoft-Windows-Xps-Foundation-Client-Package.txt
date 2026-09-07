@@ -1,0 +1,12 @@
+\XPS Viewer.lnk
+\XpsFilt.dll
+\xpsfilt.dll.mui
+\xpsrchvw.exe
+\xpsrchvw.exe.mui
+\xpsrchvw.xml
+\XPSSHHDR.dll
+_microsoft-windows-p..ellextensionhandler_31bf3856ad364e35
+_microsoft-windows-x..achviewer.resources_31bf3856ad364e35
+_microsoft-windows-xpsifilter.resources_31bf3856ad364e35
+_microsoft-windows-xpsifilter_31bf3856ad364e35
+_microsoft-windows-xpsreachviewer_31bf3856ad364e35

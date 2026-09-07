@@ -1,0 +1,13 @@
+\vmbkmclr.sys
+\vmbuspipe.sys
+\vmbuspiper.dll
+\vmbusproxy.sys
+\vmbusr.sys
+\vmbusr.sys.mui
+\wvmbusr.inf
+\wvmbusr.inf_loc
+_dual_wvmbusr.inf_31bf3856ad364e35
+_hyperv-vmbus-pipedriver_31bf3856ad364e35
+_hyperv-vmbus-proxydriver_31bf3856ad364e35
+_microsoft-hyper-v-kmclr_31bf3856ad364e35
+_wvmbusr.inf.resources_31bf3856ad364e35

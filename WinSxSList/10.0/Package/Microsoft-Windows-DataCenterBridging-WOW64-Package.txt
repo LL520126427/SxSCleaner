@@ -1,0 +1,11 @@
+\DcbQos.psd1
+\MSFT_NetQosDcbxSetting.cdxml
+\MSFT_NetQosDcbxSetting.Format.ps1xml
+\MSFT_NetQosDcbxSetting.Types.ps1xml
+\MSFT_NetQosFlowControl.cdxml
+\MSFT_NetQosFlowControl.Format.ps1xml
+\MSFT_NetQosFlowControl.Types.ps1xml
+\MSFT_NetQosTrafficClass.cdxml
+\MSFT_NetQosTrafficClass.Format.ps1xml
+\MSFT_NetQosTrafficClass.Types.ps1xml
+_microsoft-windows-datacenterbridging_31bf3856ad364e35

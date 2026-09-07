@@ -1,0 +1,5 @@
+\quotes
+\simptcp.dll
+\simptcp.dll.mui
+_microsoft-windows-simpletcp.resources_31bf3856ad364e35
+_microsoft-windows-simpletcp_31bf3856ad364e35

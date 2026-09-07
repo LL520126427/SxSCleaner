@@ -1,0 +1,12 @@
+\browser.h1s
+\ConfigureIEOptionalComponents.exe
+\ie8props.propdesc
+\ie9props.propdesc
+\iexplore.exe
+\iexplore.exe.mui
+\RegisterIEPKEYs.exe
+_microsoft-windows-help-browser.resources_31bf3856ad364e35
+_microsoft-windows-i..-optional.resources_31bf3856ad364e35
+_microsoft-windows-i..eoptionalcomponents_31bf3856ad364e35
+_microsoft-windows-i..etexplorer-optional_31bf3856ad364e35
+_microsoft-windows-ie-gc-registeriepkeys_31bf3856ad364e35

@@ -1,0 +1,17 @@
+\hvax64.exe
+\hvhostsvc.dll
+\hvhostsvc.dll.mui
+\hvix64.exe
+\hvloader.dll
+\hvloader.dll.mui
+\HvService.inf
+\hvservice.sys
+\kdhvcom.dll
+\winhvr.sys
+_dual_hvservice.inf_31bf3856ad364e35
+_microsoft-hyper-v-d..-hypervisor-kdhvcom_31bf3856ad364e35
+_microsoft-hyper-v-d..ypervisor.resources_31bf3856ad364e35
+_microsoft-hyper-v-drivers-hypervisor_31bf3856ad364e35
+_microsoft-hyper-v-h..rvisor-host-service_31bf3856ad364e35
+_microsoft-hyper-v-h..t-service.resources_31bf3856ad364e35
+_microsoft-hyper-v-winhvr_31bf3856ad364e35

@@ -1,0 +1,11 @@
+\BCD
+\boot.sdi
+\efisys.bin
+\efisys_EX.bin
+\efisys_noprompt.bin
+\efisys_noprompt_EX.bin
+\etfsboot.com
+_microsoft-windows-b..environment-dvd-efi_31bf3856ad364e35
+_microsoft-windows-b..ironment-dvd-efisys_31bf3856ad364e35
+_microsoft-windows-b..nvironment-dvd-pcat_31bf3856ad364e35
+_microsoft-windows-b..onment-dvd-etfsboot_31bf3856ad364e35

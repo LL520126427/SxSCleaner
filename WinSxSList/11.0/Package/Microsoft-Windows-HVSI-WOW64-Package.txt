@@ -1,0 +1,3 @@
+\hvsiproxyapp.exe
+\IsolatedWindowsEnvironmentUtils.dll
+_microsoft-windows-h..public-utils-shared_31bf3856ad364e35

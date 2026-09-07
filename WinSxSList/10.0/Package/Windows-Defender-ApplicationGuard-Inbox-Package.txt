@@ -1,0 +1,13 @@
+\AppHVSI.adml
+\AppHVSI.admx
+\hvsievaluator.exe
+\hvsievaluator.exe.mui
+\hvsigpext.dll
+\hvsigpext.dll.mui
+\HvsiManagementApi.dll
+\windowsdefenderapplicationguardcsp.dll
+_microsoft-windows-hvsi-csp_31bf3856ad364e35
+_microsoft-windows-hvsi-management-api_31bf3856ad364e35
+_microsoft-windows-hvsi-policy.resources_31bf3856ad364e35
+_microsoft-windows-s..phvsi-adm.resources_31bf3856ad364e35
+_microsoft-windows-security-apphvsi-adm_31bf3856ad364e35

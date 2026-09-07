@@ -1,0 +1,9 @@
+\defaultlocationcpl.dll
+\defaultlocationcpl.dll.mui
+\LocationNotifications.exe
+\LocationNotifications.exe.mui
+\locationnotificationsview.xml
+_microsoft-windows-m..cationnotifications_31bf3856ad364e35
+_microsoft-windows-m..epc-defaultlocation_31bf3856ad364e35
+_microsoft-windows-m..fications.resources_31bf3856ad364e35
+_microsoft-windows-m..tlocation.resources_31bf3856ad364e35

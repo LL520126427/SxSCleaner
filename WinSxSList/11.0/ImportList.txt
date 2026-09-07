@@ -1,0 +1,154 @@
+;Windows 11 移除
+;系统监视工具
+Microsoft-OneCore-Base-Tools-Sysmon-OptionalFeature-Package
+;Recall
+UserExperience-Recall-Package
+;工作文件夹客户端
+Microsoft-Windows-EnterpriseClientSync-Host-FOD-Package
+Microsoft-Windows-EnterpriseClientSync-Host-Package
+;Windows Communication Foundation HTTP/非HTTP 激活
+Microsoft-Windows-NetFx3-WCF-OC-Package
+;WCF 服务（包括 HTTP 激活、消息队列(MSMQ)激活、命名管道激活、TCP 激活）
+Microsoft-Windows-NetFx4-WCF-US-OC-Package
+;轻型目录服务
+Microsoft-Windows-DirectoryServices-ADAM-Client-Package
+Microsoft-Windows-DirectoryServices-ADAM-Client-Admin-Package
+Microsoft-Windows-DirectoryServices-ADAM-Client-FOD-Package
+;Hyper-V
+Microsoft-Hyper-V-ClientEdition-Package
+Microsoft-Hyper-V-ClientEdition-WOW64-Package
+;Internet Information Services 可承载的Web核心、Windows Process Activation Services
+Microsoft-Windows-IIS-WebServer-Package
+;Internet 信息服务
+Microsoft-Windows-IIS-WebServer-AddOn-Package
+Microsoft-Windows-IIS-WebServer-AddOn-2-Package
+;Microsoft NT 内核集成 VSC 驱动程序、Microsoft NT 内核集成虚拟设备
+Microsoft-Windows-HVSI-Package
+Microsoft-Windows-HVSI-WOW64-Package
+;MSMQ 服务器
+Microsoft-Windows-MSMQ-Client-Package
+Microsoft-Windows-MSMQ-Client-Home-Premium-Package
+;多点连接
+Microsoft-Windows-MultiPoint-Connector-Package
+;NFS服务
+Microsoft-Windows-NFS-ClientSKU-Package
+;简单 TCP/IP 服务
+Microsoft-Windows-SimpleTCP-Package
+Microsoft-Windows-SimpleTCP-FOD-Package
+;Telnet 客户端
+Microsoft-Windows-Telnet-Client-Package
+Microsoft-Windows-Telnet-Client-FOD-Package
+;TFTP 客户端
+Microsoft-Windows-TFTP-Client-Package
+Microsoft-Windows-TFTP-Client-FOD-Package
+;虚拟机平台（Virtual Machine Platform）
+HyperV-OptionalFeature-VirtualMachinePlatform-Client-Disabled-FOD-Package
+Microsoft-Windows-HyperV-OptionalFeature-VirtualMachinePlatform-Disabled-Package
+Microsoft-Windows-HyperV-OptionalFeature-VirtualMachinePlatform-Client-Disabled-Package
+;Windows Identity Foundation 3.5
+Microsoft-Windows-Identity-Foundation-Package
+;Windows Projected 文件系统
+Microsoft-Windows-ProjFS-OptionalFeature-Package
+Microsoft-Windows-ProjFS-OptionalFeature-FOD-Package
+;Windows TIFF IFilter ( 光学字符识别 OCR )
+Microsoft-Windows-WinOcr-Package
+Microsoft-Windows-WinOcr-FOD-Package
+;Winodws 沙盒
+Containers-Client-Manager-Package
+Containers-Client-Manager-WOW64-Package
+Microsoft-Windows-Containers-OptionalFeatures-Package
+Containers-Client-Shared-Package
+Containers-DisposableClientVM-Package
+Containers-OptionalFeature-DisposableClientVM-Package
+HyperV-Compute-Host-VirtualMachines-Package
+HyperV-VmBus-Host-Package
+Microsoft-Onecore-SPP-VirtualDevice-Package
+Microsoft-Windows-ApiSetSchemaExtension-HyperV-DeviceVirtualization-Package
+;Windows 虚拟机监控程序平台（Windows Hypervisor Platform）
+Microsoft-Windows-HyperV-OptionalFeature-HypervisorPlatform-Disabled-Package
+HyperV-Hypervisor-Package
+HyperV-VID-Package
+Microsoft-OneCore-IsolatedUserMode-Package
+Microsoft-OneCore-VirtualizationBasedSecurity-Package
+Microsoft-Windows-SecConfig-Package
+;旧版组件
+Microsoft-Windows-Legacy-Components-OC-Package
+Microsoft-Windows-Legacy-Components-OC-WOW64-Package
+Microsoft-Windows-WOWSupport-Legacy-Package
+Microsoft-Windows-WOWSupport-Legacy-WOW64-Package
+;容器和容器服务器
+Microsoft-Windows-OneCore-Containers-Opt-Package
+Microsoft-Windows-OneCore-Containers-Client-Opt-Package
+;设备锁定
+Microsoft-Windows-Client-EmbeddedExp-Package
+Microsoft-Windows-Client-EmbeddedExp-WOW64-Package
+Microsoft-Windows-Client-ShellLauncher-Package
+;适用于Linux 的Windows子系统
+Microsoft-Windows-Lxss-Optional-Package
+Microsoft-Windows-Lxss-Optional-WOW64-Package
+;受保护的主机
+Microsoft-Windows-PAW-Feature-Package
+;数据中心桥接
+Microsoft-Windows-DataCenterBridging-Package
+Microsoft-Windows-DataCenterBridging-WOW64-Package
+;远程差分压缩 (RDC)
+Microsoft-Windows-RDC-Package
+;WD-Default-Definitions
+Windows-Defender-AM-Default-Definitions-OptionalWrapper-Package
+;媒体功能
+Microsoft-Windows-MediaPlayback-OC-Package
+;Windows Media Player
+Microsoft-Windows-MediaPlayer-Package
+Microsoft-Windows-Media-Player-WOW64-Package
+Microsoft-Windows-MediaPlayer-Payload-Package
+Microsoft-Windows-MediaPlayer-Payload-WOW64-Package
+Microsoft-Windows-WindowsMediaPlayer-Troubleshooters-Package
+Microsoft-Windows-WMPNetworkSharingService-Package
+Microsoft-Windows-WMPNetworkSharingService-WOW64-Package
+Microsoft-Windows-Media-Format-Package
+Microsoft-Windows-Media-Format-WOW64-Package
+;XPS 服务（Microsoft XPS 文档写入程序）
+Microsoft-Windows-Printing-XPSServices-Package
+;--------------------------------------------------------------------------------
+;分割线以下为移除的组件  以上为Windows 功能的组件
+;杀毒
+Microsoft-Windows-SenseClient-Package
+Microsoft-Windows-SenseClient-Task-Package
+Windows-Defender-Group-Policy-Package
+Windows-Defender-ApplicationGuard-Inbox-Package
+Windows-Defender-ApplicationGuard-Inbox-WOW64-Package
+;云盘
+Microsoft-Windows-OneDrive-Setup-Package
+Microsoft-Windows-OneDrive-Setup-WOW64-Package
+;旧版 Edge 浏览器
+Microsoft-Windows-Internet-Browser-Package
+Microsoft-OneCore-Edge-WebRuntime-Package
+;脱机文件
+Microsoft-Windows-OfflineFiles-Package
+Microsoft-Windows-OfflineFiles-WOW64-Package
+;WinSAT 评估工具
+Microsoft-Windows-WinSATMediaFiles-Package
+;Windows 帮助内容
+Microsoft-Windows-Help-ClientUA-Client-Package
+Microsoft-Windows-Help-ClientUA-CoreCountrySpecific-Package
+Server-Help-Package.ClientEnterprise
+Server-Help-Package.ClientHomePremium
+;打印驱动
+Microsoft-Windows-Printer-Drivers-Package
+;数据桥接
+Microsoft-Windows-DataCenterBridging-Package
+Microsoft-Windows-DataCenterBridging-WOW64-Package
+;移动PC
+Microsoft-Windows-MobilePC-Client-Premium-Package
+;远程桌面服务应用程序服务器
+Microsoft-Windows-AppServerClient-OptGroup-Package
+Microsoft-Windows-AppServerClient-OptGroup-WOW64-Package
+Microsoft-Windows-TerminalServices-AppServer-Client-FOD-Package
+Microsoft-Windows-TerminalServices-AppServer-Client-Package
+;系统恢复
+Microsoft-Windows-RecDisc-SDP-Removable-Package
+Microsoft-Windows-RecoveryDrive-Package
+;日韩字体
+Microsoft-OneCore-Fonts-DesktopFonts-Supplement-Kore-Package
+Microsoft-OneCore-Fonts-DesktopFonts-Supplement-Jpan-Package
+Microsoft-OneCore-Fonts-DesktopFonts-Supplement-Hant-Package

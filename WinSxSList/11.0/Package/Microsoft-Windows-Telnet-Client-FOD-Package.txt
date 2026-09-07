@@ -1,0 +1,6 @@
+\telnet.exe
+\telnet.exe.mui
+\TFTP.EXE
+_microsoft-windows-t..-deployment-package_31bf3856ad364e35
+_microsoft-windows-t..et-client.resources_31bf3856ad364e35
+_microsoft-windows-telnet-client_31bf3856ad364e35

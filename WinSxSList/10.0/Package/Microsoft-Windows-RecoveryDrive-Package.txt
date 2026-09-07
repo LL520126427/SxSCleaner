@@ -1,0 +1,5 @@
+\recovery.dll
+\RecoveryDrive.exe
+\RecoveryDrive.lnk
+_microsoft-windows-recoverycenter-core_31bf3856ad364e35
+_microsoft-windows-recoverydrive_31bf3856ad364e35

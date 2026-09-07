@@ -1,0 +1,3 @@
+\configuration.ini
+\hwr.dat
+_microsoft-windows-c..recognition.zh-hans_31bf3856ad364e35

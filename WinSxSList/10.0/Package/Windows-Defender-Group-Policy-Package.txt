@@ -1,0 +1,4 @@
+\WindowsDefender.adml
+\WindowsDefender.admx
+_windows-defender-group-policy.resources_31bf3856ad364e35
+_windows-defender-group-policy_31bf3856ad364e35

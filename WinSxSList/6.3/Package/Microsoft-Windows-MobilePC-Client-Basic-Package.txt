@@ -1,0 +1,8 @@
+\mblctr.exe
+\mblctr.exe.mui
+\mblctr.mof
+\MobilePCMobilityCenter-ppdlic.xrm-ms
+\MobilePCMobilityCenterInstrumentation.ptxml
+_microsoft-windows-m..itycenter.resources_31bf3856ad364e35
+_microsoft-windows-m..lepc-mobilitycenter_31bf3856ad364e35
+_microsoft-windows-m..ter-instrumentation_31bf3856ad364e35

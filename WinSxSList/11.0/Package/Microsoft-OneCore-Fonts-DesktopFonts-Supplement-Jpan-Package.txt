@@ -1,0 +1,6 @@
+\YuGothB.ttc
+\YuGothL.ttc
+\YuGothR.ttc
+_microsoft-windows-f..etype-yugothiclight_31bf3856ad364e35
+_microsoft-windows-f..uetype-yugothicbold_31bf3856ad364e35
+_microsoft-windows-font-truetype-yugothic_31bf3856ad364e35

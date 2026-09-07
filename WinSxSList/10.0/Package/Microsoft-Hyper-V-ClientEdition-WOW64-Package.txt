@@ -1,0 +1,7 @@
+\Hyper-V.Format.ps1xml
+\Hyper-V.psd1
+\Hyper-V.Types.ps1xml
+\vmstaging.dll
+_hyperv-ux-featurestaging_31bf3856ad364e35
+_microsoft.hyperv.powershell.cmdlets.misc_31bf3856ad364e35
+_microsoft.hyperv.powershell.misc_31bf3856ad364e35

@@ -1,0 +1,16 @@
+\smi2smir.exe
+\smi2smir.exe.mui
+\smierrsm.dll
+\smierrsm.dll.mui
+\smierrsy.dll
+\smierrsy.dll.mui
+\smimsgif.dll
+\smimsgif.dll.mui
+\snmpcl.dll
+\snmpincl.dll
+\snmpreg.mof
+\snmpsmir.dll
+\snmpsmir.mof
+\snmpthrd.dll
+_microsoft-windows-w..-provider.resources_31bf3856ad364e35
+_microsoft-windows-wmi-snmp-provider_31bf3856ad364e35

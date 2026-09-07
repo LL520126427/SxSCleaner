@@ -1,0 +1,19 @@
+; Windows 7-7601 保留
+;保留组件
+Microsoft-Windows-Foundation-Package
+Microsoft-Windows-InternetExplorer-Optional-Package
+Microsoft-Windows-IE-Troubleshooters-Package
+Microsoft-Windows-InternetExplorer-Package
+Microsoft-Windows-NetFx3-OC-Package
+Microsoft-Windows-SearchEngine-Client-Package
+Microsoft-Windows-Printing-Foundation-Package
+;媒体功能
+;Microsoft-Windows-MediaPlayback-OC-Package
+;Windows Media Player
+;Microsoft-Windows-MediaPlayer-Package
+;Microsoft-Windows-WindowsMediaPlayer-Troubleshooters-Package
+;Microsoft-Windows-WMPNetworkSharingService-Package
+;Microsoft-Windows-WMPNetworkSharingService-WOW64-Package
+;Microsoft-Windows-Media-Format-Package
+;Microsoft-Windows-Media-Format-WOW64-Package
+;Microsoft-Windows-MediaPlayer-DVDRegistration-Package

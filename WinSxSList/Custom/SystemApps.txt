@@ -1,3 +1,20 @@
+;AI
+Microsoft.AIFabric.CBS.1.6_
+;Asynchronous Text 服务
+Microsoft.AsyncTextService_
+;Windows 默认锁屏
+Microsoft.LockApp_
+;桌面应用 Web 查看器
+Microsoft.Win32WebViewHost_
+Microsoft.Windows.AugLoop.CBS_
+;固定确认对话框
+Microsoft.Windows.PinningConfirmationDialog_
+;安全移除硬件
+Microsoft.Windows.XGpuEjectDialog_
+MicrosoftWindows.Client.AIX_
+MicrosoftWindows.Client.CoreAI_
+MicrosoftWindows.Client.OOBE_
+MicrosoftWindows.Client.Photon_
 ;指定访问锁定应用
 Microsoft.Windows.AssignedAccessLockApp_
 ;内容传递管理器
@@ -37,3 +54,5 @@ Microsoft.Windows.PeopleExperienceHost_
 NcsiUwpApp_
 ;条形码预览
 Windows.CBSPreview_
+;Microsoft Windows 安全评估浏览器
+Microsoft.Windows.SecureAssessmentBrowser_

@@ -1,0 +1,15 @@
+\c2wtshost.exe
+\c2wtshost.exe.config
+\c2wtsres.dll
+\c2wtsres.dll.mui
+\Microsoft.IdentityModel.dll
+\Microsoft.IdentityModel.resources.dll
+\Microsoft.IdentityModel.WindowsTokenService.dll
+\Microsoft.IdentityModel.WindowsTokenService.resources.dll
+_c2wtshost_31bf3856ad364e35
+_c2wtsres.resources_31bf3856ad364e35
+_c2wtsres_31bf3856ad364e35
+_microsoft.identitym..enservice.resources_31bf3856ad364e35
+_microsoft.identitym..windowstokenservice_31bf3856ad364e35
+_microsoft.identitymodel.resources_31bf3856ad364e35
+_microsoft.identitymodel_31bf3856ad364e35

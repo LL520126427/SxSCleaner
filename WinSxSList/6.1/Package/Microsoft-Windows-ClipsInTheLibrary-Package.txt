@@ -1,0 +1,5 @@
+\Filters.xml
+\WMM2CLIP.dll
+\WMM2CLIP.dll.mui
+_microsoft-windows-c..helibrary.resources_31bf3856ad364e35
+_microsoft-windows-clipsinthelibrary_31bf3856ad364e35

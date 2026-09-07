@@ -1,0 +1,4 @@
+\prjflt.sys
+\ProjectedFSLib.dll
+_microsoft-windows-projfs-api_31bf3856ad364e35
+_microsoft-windows-projfs-driver_31bf3856ad364e35

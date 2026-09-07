@@ -1,0 +1,9 @@
+\vid.dll
+\vid.dll.mui
+\Vid.sys
+\wvid.inf
+\wvid.inf_loc
+_dual_wvid.inf_31bf3856ad364e35
+_microsoft-hyper-v-vstack-vid.resources_31bf3856ad364e35
+_microsoft-hyper-v-vstack-vid_31bf3856ad364e35
+_wvid.inf.resources_31bf3856ad364e35

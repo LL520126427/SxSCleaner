@@ -1,0 +1,3 @@
+\quotes
+\simptcp.dll
+_microsoft-windows-simpletcp_31bf3856ad364e35

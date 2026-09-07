@@ -1,0 +1,2 @@
+\SecConfig.efi
+_microsoft-windows-secconfig_31bf3856ad364e35

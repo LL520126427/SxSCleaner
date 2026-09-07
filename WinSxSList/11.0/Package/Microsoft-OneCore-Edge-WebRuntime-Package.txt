@@ -1,0 +1,4 @@
+\EdgeContent.dll
+\MicrosoftEdgeSH.exe
+_microsoft-windows-edge-edgecontent_31bf3856ad364e35
+_microsoft-windows-edge-microsoftedgesh_31bf3856ad364e35

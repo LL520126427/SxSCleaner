@@ -1,0 +1,16 @@
+\FaceDetectorResources.dll
+\FaceProcessor.dll
+\FaceProcessorCore.dll
+\FaceRecognitionEngineAdapter.dll
+\FaceRecognitionEngineAdapterResources_v4.dll
+\FaceRecognitionEngineAdapterResourcesCore.dll
+\FaceRecognitionEngineAdapterResourcesSecure.dll
+\FaceRecognitionSensorAdapter.dll
+\FaceRecognitionSensorAdapterResources.dll
+\FaceRecognitionSensorAdapterVsm.dll
+\FaceRecognitionSensorAdapterVsmSecure.dll
+\FaceTrackerInternal.dll
+\HelloFace.cat
+\HelloFace.dll
+\HelloFace.inf
+_microsoft-windows-hello-face_31bf3856ad364e35

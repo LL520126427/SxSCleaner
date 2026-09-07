@@ -1,0 +1,5 @@
+\WorkFolders.exe
+\WorkfoldersControl.dll
+\WorkFoldersShell.dll
+\workfolderssvc.dll
+_microsoft-windows-e..riseclientsync-host_31bf3856ad364e35

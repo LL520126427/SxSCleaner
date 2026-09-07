@@ -1,0 +1,11 @@
+\DirectExperience-ppdlic.xrm-ms
+\HotStartUserAgent.dll
+\HotStartUserAgent.dll.mui
+\mblctr.exe
+\mblctr.exe.mui
+\mblctr.mof
+\MobilePCMobilityCenter-ppdlic.xrm-ms
+_microsoft-windows-hotstart.resources_31bf3856ad364e35
+_microsoft-windows-hotstart_31bf3856ad364e35
+_microsoft-windows-m..itycenter.resources_31bf3856ad364e35
+_microsoft-windows-m..lepc-mobilitycenter_31bf3856ad364e35

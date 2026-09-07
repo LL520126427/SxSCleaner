@@ -1,0 +1,16 @@
+\App.xbf
+\AppxBlockMap.xml
+\AppxManifest.xml
+\AppxSignature.p7x
+\Badge.png
+\CheckPointVpnPluginApp.exe
+\CheckPointVpnPluginAppBg.winmd
+\Logo.png
+\MainPage.xbf
+\resources.pri
+\SmallLogo.png
+\SplashScreen.png
+\StandardStyles.xbf
+\StoreLogo.png
+_checkpoint-vpnplugin-appx.appxsetup_31bf3856ad364e35
+_checkpoint-vpnplugin-appx_31bf3856ad364e35

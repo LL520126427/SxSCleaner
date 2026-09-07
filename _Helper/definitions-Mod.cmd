@@ -10,6 +10,7 @@ set Tool_SxSExtract="%SystemRoot%\System32\cscript.exe" //NoLogo "%Path_Helper%\
 set Tool_TIWorker=%Path_Helper%\nsudoc.exe
 REM set Tool_CabDir=%Path_Helper%\cabdir.exe
 set Tool_CabArc=%Path_Helper%\cabarc.exe
+set sort=%Path_Helper%\sort.exe
 set Script_Export=%Path_Helper%\export.cmd
 set Parameter_SxSExtract=/VICIOUSHACKS
 set ImportList=%Path_Root%\ImportList.txt

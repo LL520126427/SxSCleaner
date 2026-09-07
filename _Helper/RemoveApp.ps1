@@ -1,3 +1,4 @@
+# 感谢原作者 ionuttbara 的辛苦付出 https://github.com/ionuttbara/windows-defender-remover
 # 定义要卸载的AppX应用列表
 # $remove_appx = @("SecHealthUI")
 # 接收参数：传入要卸载的AppX列表
@@ -78,6 +79,9 @@ foreach ($choice in $remove_appx) {
 
         # 在注册表中标记应用为停用状态
         ni "$store\Deprovisioned\$appx.PackageFamilyName" -force >''
+
+        # 输出包全名
+        $PackageFullName
 
         # 为所有用户标记应用为停用
         foreach ($sid in $users) {

@@ -1,0 +1,12 @@
+\WMPMediaSharing.dll
+\WMPMediaSharing.dll.mui
+\wmpnssci.dll
+\wmpnssci.dll.mui
+\WMPNSSUI.dll
+\wmpnssui.dll.mui
+_microsoft-windows-w..publicapi.resources_31bf3856ad364e35
+_microsoft-windows-wmpnss-api.resources_31bf3856ad364e35
+_microsoft-windows-wmpnss-api_31bf3856ad364e35
+_microsoft-windows-wmpnss-publicapi_31bf3856ad364e35
+_microsoft-windows-wmpnssui.resources_31bf3856ad364e35
+_microsoft-windows-wmpnssui_31bf3856ad364e35

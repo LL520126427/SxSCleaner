@@ -1,0 +1,2 @@
+\telnet.exe
+_microsoft-windows-telnet-client_31bf3856ad364e35

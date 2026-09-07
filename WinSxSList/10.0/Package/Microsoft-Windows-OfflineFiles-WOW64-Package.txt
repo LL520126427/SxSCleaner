@@ -1,0 +1,6 @@
+\cscobj.dll
+\OfflineFilesConfigurationWmiProvider.mof
+\OfflineFilesConfigurationWmiProvider_Uninstall.mof
+\OfflineFilesWmiProvider.mof
+\OfflineFilesWmiProvider_Uninstall.mof
+_microsoft-windows-o..nefiles-extend-apis_31bf3856ad364e35

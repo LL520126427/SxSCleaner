@@ -1,0 +1,16 @@
+\DialogBlockerProc.dll
+\KeyboardFilterCore.dll
+\KeyboardFilterShim.dll
+\KeyboardFilterWmi.dll
+\KeyboardFilterWmi.dll.mui
+\keyboardfilterwmi.mfl
+\keyboardfilterwmi.mof
+\keyboardfilterwmi_Uninstall.mfl
+\keyboardfilterwmi_Uninstall.mof
+\uwfwmi.dll
+_microsoft-windows-e..-keyboardfiltercore_31bf3856ad364e35
+_microsoft-windows-e..-unifiedwritefilter_31bf3856ad364e35
+_microsoft-windows-e..d-dialogblockerproc_31bf3856ad364e35
+_microsoft-windows-e..d-keyboardfilterwmi_31bf3856ad364e35
+_microsoft-windows-e..filterwmi.resources_31bf3856ad364e35
+_microsoft-windows-e..rdfiltershim-client_31bf3856ad364e35

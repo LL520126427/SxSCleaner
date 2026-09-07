@@ -1,0 +1,15 @@
+\CustomShellHost.exe
+\eshell.exe
+\eshell.exe.mui
+\ShellLauncherConfig.dll
+\ShellLauncherConfig.exe
+\shelllauncherproviderevents.dll
+\shelllauncherproviderevents.dll.mui
+\ShellLauncherRepository.dll
+\WESL_ShellLauncher.dll
+\WESL_ShellLauncher.mof
+\WESL_ShellLauncher_uninstall.mof
+_microsoft-windows-e..llauncher.resources_31bf3856ad364e35
+_microsoft-windows-embedded-shelllauncher_31bf3856ad364e35
+_microsoft-windows-s..agnostics.resources_31bf3856ad364e35
+_microsoft-windows-s..auncher-diagnostics_31bf3856ad364e35

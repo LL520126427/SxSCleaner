@@ -3,16 +3,14 @@
 PerfLogs
 \$Recycle.Bin
 Documents and Settings
+inetpub$
 --------------------其他组件移除--------------------
-;入门（Windows 11）
-WebExperienceHost.dll
-WebExperienceHostApp.exe
-;Windows 备份（Windows 11）
-WindowsBackup.dll
-WindowsBackupClient.exe
-WindowsBackup$
+Media$
+\MediaViewer$
+;日记本
+Windows Journal
 ;云盘
-OneDrive
+OneDrive$
 ;旧版 Microsoft Edge 浏览器
 MsEdgeCrashpad$
 Microsoft.MicrosoftEdge_8wekyb3d8bbwe$
@@ -166,6 +164,7 @@ UserDataTimeUtil.dll
 VCardParser.dll
 ;Windows Reader (PDF)
 Windows.Data.Pdf.dll
+glcndFilter.dll
 ;游戏资源管理器
 WgxInstalledGame.mof
 gameuxmig.dll
@@ -379,8 +378,7 @@ hpo.*.dll
 ;兄弟打印机驱动
 brmf.*inf
 ;调制解调器
-mdmirmdm.inf
-mdmnokia.inf
+mdm.*inf
 ;软盘
 flpydisk.inf
 fdc.inf

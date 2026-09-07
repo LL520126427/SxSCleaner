@@ -1,0 +1,34 @@
+\Desktop.ini
+\Windows Balloon.wav
+\Windows Battery Critical.wav
+\Windows Battery Low.wav
+\Windows Critical Stop.wav
+\Windows Default.wav
+\Windows Ding.wav
+\Windows Error.wav
+\Windows Exclamation.wav
+\Windows Feed Discovered.wav
+\Windows Hardware Fail.wav
+\Windows Hardware Insert.wav
+\Windows Hardware Remove.wav
+\Windows Information Bar.wav
+\Windows Logoff Sound.wav
+\Windows Logon Sound.wav
+\Windows Navigation Start.wav
+\Windows Notify.wav
+\Windows Pop-up Blocked.wav
+\Windows Print complete.wav
+\Windows User Account Control.wav
+_microsoft-windows-s..-soundthemes-garden_31bf3856ad364e35
+_microsoft-windows-s..-soundthemes-quirky_31bf3856ad364e35
+_microsoft-windows-s..-soundthemes-sonata_31bf3856ad364e35
+_microsoft-windows-s..dthemes-calligraphy_31bf3856ad364e35
+_microsoft-windows-s..l-soundthemes-delta_31bf3856ad364e35
+_microsoft-windows-s..ndthemes-characters_31bf3856ad364e35
+_microsoft-windows-s..oundthemes-festival_31bf3856ad364e35
+_microsoft-windows-s..oundthemes-heritage_31bf3856ad364e35
+_microsoft-windows-s..soundthemes-savanna_31bf3856ad364e35
+_microsoft-windows-s..undthemes-afternoon_31bf3856ad364e35
+_microsoft-windows-s..undthemes-cityscape_31bf3856ad364e35
+_microsoft-windows-s..undthemes-landscape_31bf3856ad364e35
+_microsoft-windows-shell-soundthemes-raga_31bf3856ad364e35

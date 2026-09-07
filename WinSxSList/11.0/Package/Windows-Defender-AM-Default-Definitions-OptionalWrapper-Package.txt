@@ -1,0 +1,7 @@
+\MpAsBase.vdm
+\MpAsDlta.vdm
+\MpAvBase.vdm
+\MpAvDlta.vdm
+\MpEngine.dll
+_windows-defender-am-engine_31bf3856ad364e35
+_windows-defender-am-sigs_31bf3856ad364e35

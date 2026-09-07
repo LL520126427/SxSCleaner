@@ -1,0 +1,4 @@
+\MicrosoftEdge.adml
+\MicrosoftEdge.admx
+_microsoft-windows-i..iguration.resources_31bf3856ad364e35
+_microsoft-windows-i..owser-configuration_31bf3856ad364e35

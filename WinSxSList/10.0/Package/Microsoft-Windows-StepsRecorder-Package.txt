@@ -1,0 +1,6 @@
+\psr.exe
+\psr.exe.mui
+\psr.exe.mun
+\Steps Recorder.lnk
+_microsoft-windows-a..roblemstepsrecorder_31bf3856ad364e35
+_microsoft-windows-a..srecorder.resources_31bf3856ad364e35

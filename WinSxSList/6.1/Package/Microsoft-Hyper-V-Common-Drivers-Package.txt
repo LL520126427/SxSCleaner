@@ -1,0 +1,10 @@
+\storvsc.sys
+\vmbus.sys
+\vmbuscoinstaller.dll
+\vmbuspipe.dll
+\vmbusres.dll
+\winhv.sys
+\wstorvsc.inf
+\wvmbus.inf
+_wstorvsc.inf_31bf3856ad364e35
+_wvmbus.inf_31bf3856ad364e35

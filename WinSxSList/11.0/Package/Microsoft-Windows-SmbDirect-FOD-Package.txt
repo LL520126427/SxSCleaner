@@ -1,0 +1,4 @@
+\smbdirect.sys
+\smbdirect.sys.mui
+_microsoft-windows-smbdirect.resources_31bf3856ad364e35
+_microsoft-windows-smbdirect_31bf3856ad364e35

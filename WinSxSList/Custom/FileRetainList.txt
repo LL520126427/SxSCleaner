@@ -1,10 +1,14 @@
-;文件夹、文件保留列表
-;文件
+; 文件保留列表
+img0.jpg
 KBDUS.DLL
 desktop.ini
 ComSvcConfig.resources.dll
 nvstor.sys
 ntprint.inf
+;httpapi.dll，属于组件：Microsoft-Windows-HVSI-Package, 导致 netsh 命令报错
+httpapi.dll
+; sqmapi.dll，属于组件：Microsoft-Windows-Media-Format-Package
+sqmapi.dll
 ;System.Memory.dll、System.Numerics.Vectors.dll、System.Runtime.CompilerServices.Unsafe.dll、System.ValueTuple.dll，属于组件：Microsoft-Hyper-V-ClientEdition-Package、Microsoft-Hyper-V-ClientEdition-Package (zh-CN) 影响商店应用添加
 System.Memory.dll
 System.Numerics.Vectors.dll
@@ -54,24 +58,3 @@ BCD
 etfsboot.com
 ;bootfix.bin，属于组件：Microsoft-Windows-RecDisc-SDP-Package (zh-CN)、Microsoft-Windows-Backup-Package (zh-CN)、Microsoft-Windows-RecDisc-SDP-Package (zh-CN)
 bootfix.bin
-;文件夹
-Temp
-ManifestCache
-Manifests
-InstallTemp
-FileMaps
-Catalogs
-zh-CHS
-zh-HANS
-ImmersiveControlPanel
-WindowsApps
-SystemApps
-\Desktop
-\Dism
-\rescache\
-microsoft-windows-servicingstack_
-microsoft.vc80.crt_
-microsoft.vc90.crt_
-microsoft.windows.c..-controls.resources_
-microsoft.windows.common-controls_
-microsoft.windows.gdiplus_

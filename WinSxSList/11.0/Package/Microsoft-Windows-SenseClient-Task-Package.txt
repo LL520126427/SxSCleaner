@@ -1,0 +1,2 @@
+\SenseTask.exe
+_windows-senseclient-task_31bf3856ad364e35

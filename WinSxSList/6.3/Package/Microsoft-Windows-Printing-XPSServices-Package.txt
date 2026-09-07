@@ -1,0 +1,7 @@
+\mxdw-manifest.ini
+\mxdw-pipelineconfig.xml
+\mxdw.gpd
+\mxdwdui.dll
+\prnms001.cat
+\prnms001.inf
+_microsoft-windows-p..g-xpsdocumentwriter_31bf3856ad364e35

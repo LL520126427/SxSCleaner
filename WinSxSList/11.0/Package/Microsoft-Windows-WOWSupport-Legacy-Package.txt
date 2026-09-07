@@ -1,0 +1,4 @@
+\ntvdm64.dll
+\ntvdm64.dll.mui
+_microsoft-windows-wow64-legacy.resources_31bf3856ad364e35
+_microsoft-windows-wow64-legacy_31bf3856ad364e35

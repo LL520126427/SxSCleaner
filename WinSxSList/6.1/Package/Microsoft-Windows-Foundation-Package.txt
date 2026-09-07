@@ -1,0 +1,15 @@
+\rdpcorets.dll
+\rdpudd.dll
+\rdpvideominiport.sys
+\RDVGHelper.exe
+\TSGenericUSBDriver.inf
+\TsUsbFlt.sys
+\TsUsbGD.sys
+\TsUsbGDCoInstaller.dll
+\TsUsbHubFilter.inf
+\TsUsbRedirectionGroupPolicyControl.exe
+\TsUsbRedirectionGroupPolicyExtension.dll
+_microsoft-windows-r..s-regkeys-component_31bf3856ad364e35
+_microsoft-windows-t..usbredirectorclient_31bf3856ad364e35
+_tsgenericusbdriver.inf_31bf3856ad364e35
+_tsusbhubfilter.inf_31bf3856ad364e35

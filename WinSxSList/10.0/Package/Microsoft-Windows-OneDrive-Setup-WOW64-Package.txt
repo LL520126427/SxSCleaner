@@ -1,0 +1,4 @@
+\OneDrive.ico
+\OneDrive.lnk
+\OneDriveSetup.exe
+_microsoft-windows-onedrive-setup_31bf3856ad364e35

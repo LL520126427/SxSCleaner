@@ -1,0 +1,6 @@
+\micaut.dll
+\mraut.dll
+\TFTP.EXE
+_microsoft-windows-t..-deployment-package_31bf3856ad364e35
+_microsoft-windows-t..etpc-mathrecognizer_31bf3856ad364e35
+_microsoft-windows-t..pc-mathinputcontrol_31bf3856ad364e35

@@ -1,0 +1,4 @@
+\ntkrla57.exe
+\securekernella57.exe
+_microsoft-onecore-i..sermode-kernel-la57_31bf3856ad364e35
+_microsoft-windows-os-kernel-la57_31bf3856ad364e35

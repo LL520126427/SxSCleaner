@@ -1,0 +1,4 @@
+\sysmon.exe
+\sysmondrv.sys
+_microsoft-onecore-b..ools-sysmon-service_31bf3856ad364e35
+_microsoft-onecore-base-tools-sysmon_31bf3856ad364e35

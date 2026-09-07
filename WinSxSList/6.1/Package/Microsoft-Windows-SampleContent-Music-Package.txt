@@ -1,0 +1,16 @@
+\Clip_1080_5sec_10mbps_h264.mp4
+\Clip_1080_5sec_MPEG2_HD_15mbps.mpg
+\Clip_1080_5sec_VC1_15mbps.wmv
+\Clip_480_5sec_6mbps_h264.mp4
+\Clip_480i_5sec_6mbps_new.mpg
+\Clip_480p_5sec_6mbps_new.mpg
+\desktop.ini
+\Kalimba.mp3
+\Maid with the Flaxen Hair.mp3
+\Sleep Away.mp3
+\Wildlife.wmv
+\winsat.wmv
+\winsatencode.wmv
+_microsoft-windows-musicsamples_31bf3856ad364e35
+_microsoft-windows-videosamples_31bf3856ad364e35
+_microsoft-windows-winsatmediasamples_31bf3856ad364e35

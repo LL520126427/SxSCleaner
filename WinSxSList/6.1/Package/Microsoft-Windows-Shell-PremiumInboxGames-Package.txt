@@ -1,0 +1,14 @@
+\Chess.dll
+\Chess.exe
+\Chess.exe.mui
+\ChessMCE.png
+\Mahjong.dll
+\Mahjong.exe
+\Mahjong.exe.mui
+\MahjongMCE.png
+\Shell-InBoxGames-Shanghai-ppdlic.xrm-ms
+\Shell-PremiumInBoxGames-Chess-ppdlic.xrm-ms
+_microsoft-windows-s..-shanghai.resources_31bf3856ad364e35
+_microsoft-windows-s..inboxgames-shanghai_31bf3856ad364e35
+_microsoft-windows-s..iuminboxgames-chess_31bf3856ad364e35
+_microsoft-windows-s..mes-chess.resources_31bf3856ad364e35

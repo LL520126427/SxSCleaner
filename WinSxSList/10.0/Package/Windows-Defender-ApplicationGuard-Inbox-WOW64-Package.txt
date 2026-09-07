@@ -1,0 +1,2 @@
+\HvsiManagementApi.dll
+_microsoft-windows-hvsi-management-api_31bf3856ad364e35

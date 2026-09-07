@@ -1,0 +1,9 @@
+\vmbkmclr.sys
+\vmbuspiper.dll
+\vmbusr.sys
+\vmbusr.sys.mui
+\wvmbusr.inf
+\wvmbusr.inf_loc
+_dual_wvmbusr.inf_31bf3856ad364e35
+_microsoft-hyper-v-kmclr_31bf3856ad364e35
+_wvmbusr.inf.resources_31bf3856ad364e35
