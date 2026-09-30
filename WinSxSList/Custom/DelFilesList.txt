@@ -4,6 +4,7 @@ PerfLogs
 \$Recycle.Bin
 Documents and Settings
 inetpub$
+Games$
 --------------------其他组件移除--------------------
 Media$
 \MediaViewer$
