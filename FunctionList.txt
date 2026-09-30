@@ -6,8 +6,8 @@ Microsoft-Windows-Wallpaper-Content-Extended-FoD-Package
 Microsoft-Windows-Kernel-LA57-FoD-Package
 ;Microsoft Edge WebView2（Platform）
 Microsoft-Edge-WebView-FOD-Package
-; 旧版 Windows Media Player（应用）
-Microsoft-Windows-MediaPlayer-Package
+;旧版 Windows Media Player（应用）
+;Microsoft-Windows-MediaPlayer-Package
 ;内侧会员
 Microsoft-Windows-InsiderHub-Package
 ;邮件同步引擎
