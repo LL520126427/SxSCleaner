@@ -568,6 +568,10 @@ if /i [%Flag_RemoveC%] == [1] (
         call :RemoveComponent%Flag_REMode% "%%i"
     )
     if exist ChildList.txt for /f %%i in (ChildList.txt) do call :FastRemove "%%i" "系统组件子包"
+    call :RegLoad SOFTWARE
+    if %HostBuild% leq 9600 (
+        for /f %%i in (%ImportList%) do call :Removemum "%%i"
+    )
     call :LogInfo 系统组件移除完成
 )
 del /f /q ChildList.txt %nul2%
@@ -581,7 +585,8 @@ if %HostBuild% equ 9600 if %ssuver% gtr 17031 (
     set Flag_Import=1
     echo Microsoft-Windows-BusinessScanning-Feature-Package > %ImportList%
     echo Microsoft-Windows-Printer-Drivers-Package >> %ImportList%
-    call :MergeList %CurBuild%\ImportList.txt %txt1% %ImportList%
+    call :MergeList %CurBuild%\ImportList.txt v %txt1% %ImportList%
+    call :MergeList %CurBuild%\ImportList.txt i %txt2% %ImportList%
     call :RegLoad SOFTWARE
     call :Removemum "Microsoft-Windows-BusinessScanning-Feature-Package"
     call :Removemum "Microsoft-Windows-Printer-Drivers-Package"
@@ -916,6 +921,7 @@ exit /b
 :RegLoad
 set "TMP_%~1={bf1a281b-ad7b-4476-ac95-f47682990ce7}%_Path_Image%\Windows\System32\config\%~1"
 set "TMP_%~1=!TMP_%~1:\=/!"
+reg query HKLM\!TMP_%~1! %nul% && goto :eof
 reg load HKLM\!TMP_%~1! "%_Path_Image%\Windows\System32\config\%~1" %nul%
 exit /b
 

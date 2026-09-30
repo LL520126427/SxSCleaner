@@ -627,6 +627,9 @@ if /i [%Flag_RemoveC%] == [1] (
         call :RemoveComponent%Flag_REMode% "%%i"
     )
     if exist ChildList.txt for /f %%i in (ChildList.txt) do call :FastRemove "%%i" "系统组件子包"
+    if %HostBuild% leq 9600 (
+        for /f %%i in (%ImportList%) do call :Removemum "%%i"
+    )
     call :LogInfo 系统组件移除完成
 )
 
